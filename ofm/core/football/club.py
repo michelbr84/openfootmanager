@@ -13,10 +13,11 @@
 #
 #      You should have received a copy of the GNU General Public License
 #      along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from uuid import UUID
 
 from .player import PlayerTeam
+from .finances import FinanceManager
 
 
 class PlayerSubstitutionError(Exception):
@@ -34,10 +35,17 @@ class Club:
     squad: list[PlayerTeam]
     stadium: str
     stadium_capacity: int
+    finances: FinanceManager = field(default_factory=FinanceManager)
 
     @classmethod
     def get_from_dict(cls, club: dict, players: list[PlayerTeam]):
         club_id = UUID(int=club["id"])
+        # Basic deserialization of finances if present, else default
+        finances = FinanceManager() 
+        if "finances" in club:
+            finances.balance = club["finances"].get("balance", 0.0)
+            # Transactions would need more complex deserialization
+        
         return cls(
             club_id,
             club["name"],
@@ -47,6 +55,7 @@ class Club:
             players,
             club["stadium"],
             club["stadium_capacity"],
+            finances
         )
 
     def serialize(self) -> dict:
@@ -59,6 +68,7 @@ class Club:
             "squad": [player.details.player_id.int for player in self.squad],
             "stadium": self.stadium,
             "stadium_capacity": self.stadium_capacity,
+            "finances": self.finances.get_summary()
         }
 
     def __repr__(self):

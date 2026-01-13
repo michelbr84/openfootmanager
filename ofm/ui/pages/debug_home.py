@@ -45,5 +45,17 @@ class DebugHomePage(ttk.Frame):
         self.team_explorer_btn = ttk.Button(self, text="Team Explorer")
         self.team_explorer_btn.grid(row=7, column=0, padx=10, pady=10, sticky=EW)
 
+        self.finances_btn = ttk.Button(self, text="Finances", command=lambda: self.master.switch("finances"))
+        self.finances_btn.grid(row=8, column=0, padx=10, pady=10, sticky=EW)
+
+        self.market_btn = ttk.Button(self, text="Transfer Market", command=lambda: self.master.switch("market"))
+        self.market_btn.grid(row=9, column=0, padx=10, pady=10, sticky=EW)
+
+        self.training_btn = ttk.Button(self, text="Training", command=lambda: self.master.switch("training"))
+        self.training_btn.grid(row=10, column=0, padx=10, pady=10, sticky=EW)
+
+        self.league_btn = ttk.Button(self, text="League Table", command=lambda: self.master.switch("league"))
+        self.league_btn.grid(row=11, column=0, padx=10, pady=10, sticky=EW)
+
         self.cancel_btn = ttk.Button(self, text="Cancel")
-        self.cancel_btn.grid(row=8, column=0, padx=10, pady=10, sticky=EW)
+        self.cancel_btn.grid(row=12, column=0, padx=10, pady=10, sticky=EW)

@@ -20,3 +20,7 @@ from .player_profile import PlayerProfilePage
 from .settings import SettingsPage
 from .team_explorer import TeamExplorerPage
 from .team_selection import TeamSelectionPage
+from .finances import FinancesPage
+from .league import LeaguePage
+from .market import MarketPage
+from .training import TrainingPage

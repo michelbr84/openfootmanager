@@ -88,6 +88,10 @@ class GUI:
             "settings": self._add_frame(SettingsPage),
             "player_profile": self._add_frame(PlayerProfilePage),
             "team_explorer": self._add_frame(TeamExplorerPage),
+            "finances": self._add_frame(FinancesPage),
+            "league": self._add_frame(LeaguePage),
+            "market": self._add_frame(MarketPage),
+            "training": self._add_frame(TrainingPage),
         }
 
         self.current_page = self.pages["home"]

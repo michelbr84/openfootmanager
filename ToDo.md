@@ -24,6 +24,10 @@ This document tracks the current status of the OpenFoot Manager project, disting
     - [x] Player Profile view.
     - [x] Team Explorer.
     - [x] Settings page.
+    - [x] Finances page.
+    - [x] Transfer Market page.
+    - [x] Training page.
+    - [x] League Table page.
 - [x] **Debug Tools**:
     - [x] Debug Home.
     - [x] Debug Match view.
@@ -33,23 +37,23 @@ This document tracks the current status of the OpenFoot Manager project, disting
 ## 🚀 Planned Features
 
 ### Management & Strategy
-- [ ] **Finances**: Complete financial management system (incomes/expenses).
-- [ ] **Transfer Market**: 
-    - [ ] Hire and fire players.
+- [x] **Finances**: Complete financial management system (incomes/expenses).
+- [x] **Transfer Market**: 
+    - [x] Hire and fire players.
     - [ ] Loan system.
 - [ ] **Roster Management**: Deep capability to choose formations and specific player roles.
-- [ ] **Training**: Organize practice sessions to develop player attributes.
+- [x] **Training**: Organize practice sessions to develop player attributes.
 - [ ] **Youth Academy**: Scout and recruit new young talents.
-- [ ] **Career Progression**: 
-    - [ ] Qualify for major leagues/championchips.
-    - [ ] Win trophies.
+- [x] **Career Progression**: 
+    - [x] Qualify for major leagues/championchips.
+    - [x] Win trophies.
     - [ ] National Team management.
 
 ### Simulation & World
 - [ ] **Match Engine**:
-    - [ ] "Match Live Events" (Text-based commentary/description).
+    - [x] "Match Live Events" (Text-based commentary/description).
     - [ ] 3D Match Simulation (Long term goal).
-- [ ] **World Simulation**: Simulate results of other games in the league/world.
+- [x] **World Simulation**: Simulate results of other games in the league/world.
 - [ ] **Interactions**: Talk to the press and players.
 - [ ] **Database**: Comprehensive database of fictitious players.
 - [ ] **Expansion**:
