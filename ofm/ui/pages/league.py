@@ -4,7 +4,6 @@ from ttkbootstrap.constants import *
 class LeaguePage(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
-        self.pack(fill=BOTH, expand=YES)
         
         self.header = ttk.Label(self, text="League Table", font=("Helvetica", 24))
         self.header.pack(pady=20)

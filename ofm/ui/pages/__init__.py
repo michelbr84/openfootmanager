@@ -24,3 +24,4 @@ from .finances import FinancesPage
 from .league import LeaguePage
 from .market import MarketPage
 from .training import TrainingPage
+from .visualizer import VisualizerPage

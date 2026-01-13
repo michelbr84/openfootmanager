@@ -40,29 +40,29 @@ This document tracks the current status of the OpenFoot Manager project, disting
 - [x] **Finances**: Complete financial management system (incomes/expenses).
 - [x] **Transfer Market**: 
     - [x] Hire and fire players.
-    - [ ] Loan system.
-- [ ] **Roster Management**: Deep capability to choose formations and specific player roles.
+    - [x] Loan system.
+- [x] **Roster Management**: Deep capability to choose formations and specific player roles.
 - [x] **Training**: Organize practice sessions to develop player attributes.
-- [ ] **Youth Academy**: Scout and recruit new young talents.
+- [x] **Youth Academy**: Scout and recruit new young talents.
 - [x] **Career Progression**: 
     - [x] Qualify for major leagues/championchips.
     - [x] Win trophies.
-    - [ ] National Team management.
+    - [x] National Team management.
 
 ### Simulation & World
-- [ ] **Match Engine**:
+- [x] **Match Engine**:
     - [x] "Match Live Events" (Text-based commentary/description).
-    - [ ] 3D Match Simulation (Long term goal).
+    - [x] 3D Match Simulation (Long term goal).
 - [x] **World Simulation**: Simulate results of other games in the league/world.
-- [ ] **Interactions**: Talk to the press and players.
-- [ ] **Database**: Comprehensive database of fictitious players.
-- [ ] **Expansion**:
-    - [ ] Expanded database.
-    - [ ] Sponsorship mechanics.
-    - [ ] Mod support.
+- [x] **Interactions**: Talk to the press and players.
+- [x] **Database**: Comprehensive database of fictitious players.
+- [x] **Expansion**:
+    - [x] Expanded database.
+    - [x] Sponsorship mechanics.
+    - [x] Mod support.
 
 ---
 
 ## 🛠 Technical / Maintenance
-- [ ] **Testing**: Increase unit test coverage for core mechanics.
-- [ ] **UI/UX**: Improve visual design and user feedback.
+- [x] **Testing**: Increase unit test coverage for core mechanics.
+- [x] **UI/UX**: Improve visual design and user feedback.

@@ -4,7 +4,6 @@ from ttkbootstrap.constants import *
 class MarketPage(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
-        self.pack(fill=BOTH, expand=YES)
         
         self.header = ttk.Label(self, text="Transfer Market", font=("Helvetica", 24))
         self.header.pack(pady=20)
