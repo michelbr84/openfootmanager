@@ -114,28 +114,7 @@ Check the [CONTRIBUTING](CONTRIBUTING.md) file for more information on how to co
 
 ## FEATURES
 
-The game will have a number of features inspired by other established games on the market. The following features are planned:
-
-### MAIN PLANNED FEATURES
-
-- [ ] Choose any team and any league to manage
-- [ ] Manage the team's finances
-- [ ] Manage team's roster, being able to hire/fire players, choose team's formations and which players are going to play
-- [ ] Organize practice sections, developing players even further
-- [ ] Find new talents from Youth Academy
-- [ ] Qualify for major leagues and championships, win important trophies
-- [ ] Get the chance to become a national team's manager
-- [ ] Simulation of games with Match Live Events (Descriptions of most important match events)
-- [ ] Simulate results of other games
-- [ ] Talk to the press
-- [ ] Database of fictitious players
-
-### ADDITIONAL FEATURES
-
-- [ ] 3D simulation of matches
-- [ ] Expand database
-- [ ] Sponsorship with products that boost player's performances
-- [ ] Mod support
+For a detailed list of implemented and planned features, please refer to the [To-Do List](ToDo.md).
 
 ## LICENSE
 
