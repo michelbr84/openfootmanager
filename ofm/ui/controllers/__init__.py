@@ -26,6 +26,12 @@ from .team_explorer_controller import TeamExplorerController
 from .team_selection_controller import TeamSelectionController
 from .team_formation_controller import TeamFormationController
 from .championship_controller import ChampionshipController
+from .stats_explorer_controller import StatsExplorerController
+from .finances_controller import FinancesController
+from .market_controller import MarketController
+from .training_controller import TrainingController
+from .league_controller import LeagueController
+from .visualizer_controller import VisualizerController
 
 
 class OFMController(ControllerInterface):
@@ -55,6 +61,14 @@ class OFMController(ControllerInterface):
             "championship": ChampionshipController(
                 self, self.gui.pages["championship"]
             ),
+            "stats_explorer": StatsExplorerController(
+                self, self.gui.pages["stats_explorer"]
+            ),
+            "finances": FinancesController(self, self.gui.pages["finances"]),
+            "market": MarketController(self, self.gui.pages["market"]),
+            "training": TrainingController(self, self.gui.pages["training"]),
+            "league": LeagueController(self, self.gui.pages["league"]),
+            "visualizer": VisualizerController(self, self.gui.pages["visualizer"]),
             "settings": SettingsController(self, self.gui.pages["settings"]),
             "player_profile": PlayerProfilePageController(
                 self, self.gui.pages["player_profile"]

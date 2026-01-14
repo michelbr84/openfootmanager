@@ -95,6 +95,7 @@ class GUI:
             "visualizer": self._add_frame(VisualizerPage),
             "team_formation": self._add_frame(TeamFormationPage),
             "championship": self._add_frame(ChampionshipPage),
+            "stats_explorer": self._add_frame(StatsExplorerPage),
         }
 
         self.current_page = self.pages["home"]

@@ -8,20 +8,24 @@ class ChampionshipController(ControllerInterface):
         self._bind()
 
     def initialize(self):
-        # Mock data for demonstration as we don't have a live simulated league context here yet
-        # In a real scenario, we would pull this from self.controller.game_state or similar
-        mock_standings = [
-            (1, "Team A", 10, 8, 1, 1, 25),
-            (2, "Team B", 10, 7, 2, 1, 23),
-            (3, "Team C", 10, 6, 2, 2, 20),
-            (4, "Team D", 10, 5, 3, 2, 18),
-            (5, "Team E", 10, 4, 2, 4, 14),
-        ]
+        self.controller.db.check_clubs_file(amount=50)
+        clubs = self.controller.db.load_clubs()
         
+        # We need to sort or simulate points. For now, we just list them initialized.
+        # In a real scenario, this would read from the League class which tracks points.
+        # Since we just want "consistency" with Team Selection, we list the clubs.
+        # We can randomize points or just show 0 to show they exist.
+        
+        # Let's create dummy standings based on the clubs loaded
+        standings = []
+        for i, club in enumerate(clubs, 1):
+            # pos, name, played, won, drawn, lost, points
+            standings.append((i, club["name"], 0, 0, 0, 0, 0))
+
         for i in self.page.tree.get_children():
             self.page.tree.delete(i)
             
-        for team in mock_standings:
+        for team in standings:
             self.page.tree.insert("", "end", values=team)
 
     def switch(self, page):
