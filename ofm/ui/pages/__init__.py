@@ -23,6 +23,7 @@ from .team_selection import TeamSelectionPage
 from .finances import FinancesPage
 from .league import LeaguePage
 from .market import MarketPage
+from .championship import ChampionshipPage
 from .training import TrainingPage
 from .visualizer import VisualizerPage
 from .team_formation import TeamFormationPage
