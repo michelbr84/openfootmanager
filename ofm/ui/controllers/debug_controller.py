@@ -44,9 +44,13 @@ class DebugPageController(ControllerInterface):
     def go_to_team_explorer_page(self):
         self.switch("team_explorer")
 
+    def go_to_team_formation_page(self):
+        self.switch("team_formation")
+
     def _bind(self):
         self.page.match_sim_btn.config(command=self.go_to_match_sim_page)
         self.page.cancel_btn.config(command=self.go_to_home_page)
         self.page.team_selection_btn.config(command=self.go_to_team_selection_page)
+        self.page.team_formation_btn.config(command=self.go_to_team_formation_page)
         self.page.player_profile_btn.config(command=self.go_to_player_profile_page)
         self.page.team_explorer_btn.config(command=self.go_to_team_explorer_page)

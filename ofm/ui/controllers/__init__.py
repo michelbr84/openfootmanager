@@ -24,6 +24,7 @@ from .player_profile_controller import PlayerProfilePageController
 from .settings_controller import SettingsController
 from .team_explorer_controller import TeamExplorerController
 from .team_selection_controller import TeamSelectionController
+from .team_formation_controller import TeamFormationController
 
 
 class OFMController(ControllerInterface):
@@ -46,6 +47,9 @@ class OFMController(ControllerInterface):
             ),
             "team_selection": TeamSelectionController(
                 self, self.gui.pages["team_selection"]
+            ),
+            "team_formation": TeamFormationController(
+                self, self.gui.pages["team_formation"]
             ),
             "settings": SettingsController(self, self.gui.pages["settings"]),
             "player_profile": PlayerProfilePageController(

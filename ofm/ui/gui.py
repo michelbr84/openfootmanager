@@ -93,6 +93,7 @@ class GUI:
             "market": self._add_frame(MarketPage),
             "training": self._add_frame(TrainingPage),
             "visualizer": self._add_frame(VisualizerPage),
+            "team_formation": self._add_frame(TeamFormationPage),
         }
 
         self.current_page = self.pages["home"]
