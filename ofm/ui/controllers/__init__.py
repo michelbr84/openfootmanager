@@ -35,6 +35,7 @@ class OFMController(ControllerInterface):
         self.settings = settings
         self.db = db
         self.gui = GUI()
+        self.current_user_team = None
         self.controllers = {
             "home": HomePageController(self, self.gui.pages["home"]),
             "debug_home": DebugPageController(self, self.gui.pages["debug_home"]),

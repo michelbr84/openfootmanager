@@ -26,6 +26,11 @@ class TeamSelectionPage(ttk.Frame):
             row=0, column=0, padx=10, pady=10, columnspan=2, sticky=NS
         )
 
+        self.tree = ttk.Treeview(self, columns=("name", "country"), show="headings")
+        self.tree.heading("name", text="Team Name")
+        self.tree.heading("country", text="Country")
+        self.tree.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky=NSEW)
+
         self.button_frame = ttk.Frame(self)
 
         self.select_team_btn = ttk.Button(self.button_frame, text="Select Team")
@@ -35,5 +40,5 @@ class TeamSelectionPage(ttk.Frame):
         self.cancel_btn.pack(side="left", padx=10)
 
         self.button_frame.grid(
-            row=1, column=0, columnspan=2, padx=10, pady=10, sticky=NS
+            row=2, column=0, columnspan=2, padx=10, pady=10, sticky=NS
         )
