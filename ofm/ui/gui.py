@@ -101,6 +101,7 @@ class GUI:
             "team_formation": self._add_frame(TeamFormationPage),
             "championship": self._add_frame(ChampionshipPage),
             "stats_explorer": self._add_frame(StatsExplorerPage),
+            "edit": self._add_frame(EditPage),
         }
 
         # Reverse lookup: frame -> page name

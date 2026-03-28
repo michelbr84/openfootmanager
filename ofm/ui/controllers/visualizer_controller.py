@@ -1,5 +1,6 @@
 from ..pages.visualizer import VisualizerPage
 from .controllerinterface import ControllerInterface
+from ...core.football.formation import Formation
 
 
 class VisualizerController(ControllerInterface):
@@ -13,7 +14,7 @@ class VisualizerController(ControllerInterface):
         self.page.canvas.delete("player")
 
         # Get team data
-        team_data = self.controller.current_user_team
+        team_data = getattr(self.controller, "current_user_team", None)
         if not team_data:
             clubs = self.controller.db.load_clubs()
             if clubs:
@@ -21,87 +22,102 @@ class VisualizerController(ControllerInterface):
             else:
                 return
 
-        formation_str = team_data.get("default_formation", "4-4-2")
-
-        # Load player names from the squad
-        player_names = []
+        # Load the full Club object with PlayerTeam squad
         players_dicts = self.controller.db.load_players()
-        squad_ids = team_data.get("squad", [])
-        # Build a lookup of player id -> short_name
-        player_lookup = {}
-        for p in players_dicts:
-            player_lookup[p.get("id")] = p.get("short_name", "")
+        try:
+            club_objects = self.controller.db.load_club_objects(
+                [team_data], players_dicts
+            )
+        except Exception:
+            return
 
-        for pid in squad_ids:
-            name = player_lookup.get(pid, "")
-            if name:
-                player_names.append(name)
+        if not club_objects:
+            return
 
-        # Calculate positions and draw
-        positions = self._get_formation_positions(formation_str)
-        for i, (x, y) in enumerate(positions):
-            if i < len(player_names):
-                name = player_names[i]
-            else:
-                name = f"Player {i + 1}"
+        club = club_objects[0]
+
+        # Create a Formation and assign players exactly like TeamFormationController
+        formation = Formation(club.default_formation)
+        formation.get_best_players(club.squad)
+
+        # Draw players by position using the Formation object
+        positions = self._get_formation_positions(formation)
+
+        for (x, y), name in positions:
             self._draw_player(x, y, name)
 
-    def _draw_player(self, x, y, name):
+        # Draw bench players as small dots in a row at the bottom
+        if formation.bench:
+            bench_y = 560
+            bench_count = len(formation.bench)
+            if bench_count == 1:
+                bench_xs = [400]
+            else:
+                bench_x_start = 100
+                bench_x_end = 700
+                bench_step = (bench_x_end - bench_x_start) / (bench_count - 1)
+                bench_xs = [
+                    bench_x_start + int(i * bench_step)
+                    for i in range(bench_count)
+                ]
+            for i, bench_player in enumerate(formation.bench):
+                bx = bench_xs[i]
+                name = bench_player.player.details.short_name
+                self._draw_player(bx, bench_y, name, radius=7)
+
+    def _draw_player(self, x, y, name, radius=12):
         """Draw a player dot and name label on the canvas."""
         self.page.canvas.create_oval(
-            x - 12, y - 12, x + 12, y + 12,
+            x - radius, y - radius, x + radius, y + radius,
             fill="white", outline="black", width=1, tags="player"
         )
+        font_size = 7 if radius < 12 else 8
         self.page.canvas.create_text(
-            x, y + 20, text=name, fill="white",
-            font=("Helvetica", 8), tags="player"
+            x, y + radius + 8, text=name, fill="white",
+            font=("Helvetica", font_size), tags="player"
         )
 
-    def _get_formation_positions(self, formation_str):
-        """Parse a formation string like '4-4-2' and return (x, y) positions.
+    def _get_formation_positions(self, formation):
+        """Build (x, y) positions from a Formation object and return
+        a list of ((x, y), player_short_name) tuples for the starting 11.
 
-        The pitch area is (10, 10) to (790, 590), left = defense, right = attack.
-        GK is always included as the first position.
+        GK at x=60, DF line at x=180, MF line at x=380, FW line at x=580.
         """
-        try:
-            parts = [int(n) for n in formation_str.split("-")]
-        except (ValueError, AttributeError):
-            parts = [4, 4, 2]
-
         positions = []
-
-        # GK always at far left
-        positions.append((60, 300))
-
-        # Distribute remaining lines across the pitch width
-        # Available x range for outfield lines: ~180 to ~580
-        num_lines = len(parts)
-        if num_lines == 0:
-            return positions
-
-        x_start = 180
-        x_end = 580
-        if num_lines == 1:
-            x_values = [380]
-        else:
-            x_step = (x_end - x_start) / (num_lines - 1)
-            x_values = [x_start + int(i * x_step) for i in range(num_lines)]
-
-        # Y range for distributing players in each line
         y_min = 120
         y_max = 480
 
-        for line_idx, count in enumerate(parts):
-            x = x_values[line_idx]
-            if count == 1:
-                positions.append((x, 300))
-            else:
-                y_step = (y_max - y_min) / (count - 1)
-                for j in range(count):
-                    y = y_min + int(j * y_step)
-                    positions.append((x, y))
+        # GK
+        if formation.gk:
+            name = formation.gk.player.details.short_name
+            positions.append(((60, 300), name))
+
+        # Defenders
+        self._spread_line(formation.df, 180, y_min, y_max, positions)
+
+        # Midfielders
+        self._spread_line(formation.mf, 380, y_min, y_max, positions)
+
+        # Forwards
+        self._spread_line(formation.fw, 580, y_min, y_max, positions)
 
         return positions
+
+    @staticmethod
+    def _spread_line(player_list, x, y_min, y_max, positions):
+        """Evenly space a list of PlayerSimulation objects along a vertical line."""
+        count = len(player_list)
+        if count == 0:
+            return
+        if count == 1:
+            y_positions = [300]
+        else:
+            step = (y_max - y_min) / (count - 1)
+            y_positions = [y_min + int(i * step) for i in range(count)]
+
+        for i, player_sim in enumerate(player_list):
+            name = player_sim.player.details.short_name
+            positions.append(((x, y_positions[i]), name))
 
     def switch(self, page):
         self.controller.switch(page)

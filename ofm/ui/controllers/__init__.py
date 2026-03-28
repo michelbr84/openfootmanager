@@ -32,6 +32,7 @@ from .market_controller import MarketController
 from .training_controller import TrainingController
 from .league_controller import LeagueController
 from .visualizer_controller import VisualizerController
+from .edit_controller import EditController
 
 
 class OFMController(ControllerInterface):
@@ -77,6 +78,7 @@ class OFMController(ControllerInterface):
                 self,
                 self.gui.pages["team_explorer"],
             ),
+            "edit": EditController(self, self.gui.pages["edit"]),
         }
 
     def initialize(self):

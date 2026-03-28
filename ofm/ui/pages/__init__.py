@@ -28,3 +28,4 @@ from .stats_explorer import StatsExplorerPage
 from .training import TrainingPage
 from .visualizer import VisualizerPage
 from .team_formation import TeamFormationPage
+from .edit import EditPage

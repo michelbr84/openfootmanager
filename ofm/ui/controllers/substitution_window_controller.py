@@ -140,16 +140,38 @@ class SubstitutionWindowController:
                 return player
 
     def sub_player(self):
-        player_out = self.page.substitution_tab.team_table.item(
-            self.page.substitution_tab.team_table.focus()
+        focus_out = self.page.substitution_tab.team_table.focus()
+        focus_in = self.page.substitution_tab.reserves_table.focus()
+        if not focus_out or not focus_in:
+            return
+
+        player_out_data = self.page.substitution_tab.team_table.item(
+            focus_out
         )["values"]
-        player_in = self.page.substitution_tab.reserves_table.item(
-            self.page.substitution_tab.reserves_table.focus()
+        player_in_data = self.page.substitution_tab.reserves_table.item(
+            focus_in
         )["values"]
-        player_out = self.get_player_from_table(player_out)
-        player_in = self.get_player_from_reserves_table(player_in)
+        player_out = self.get_player_from_table(player_out_data)
+        player_in = self.get_player_from_reserves_table(player_in_data)
 
         if player_out and player_in:
+            remaining_subs = (
+                self.team.max_substitutions
+                - self.team.substitutions
+                - self.team.temporary_subs
+            )
+            if remaining_subs <= 0:
+                return
+
+            try:
+                elapsed = self.live_game.total_elapsed_time
+                added = self.live_game.added_time
+                self.team.sub_player(
+                    player_out, player_in, elapsed, added, False
+                )
+            except Exception:
+                return
+
             self.update_formation_table()
             self.update_reserves_table()
             self.get_substitution_amount()

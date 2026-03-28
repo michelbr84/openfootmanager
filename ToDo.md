@@ -77,9 +77,10 @@ This document tracks the current status of the OpenFoot Manager project.
     - [x] Match Visualizer (2D pitch with formation dots).
 - [x] **Debug Tools**:
     - [x] Debug Home (navigation hub).
-    - [x] Debug Match (live simulation, commentary, stats, substitutions).
+    - [x] Debug Match (live simulation, commentary, stats, working substitutions).
+    - [x] Edit page (edit player attributes, team settings, save to DB).
 - [x] **Themes**: Custom "football" and "darkfootball" ttkbootstrap themes.
-- [x] **UI/UX**: Status bar, responsive layouts, keyboard shortcuts.
+- [x] **UI/UX**: Status bar, responsive layouts, keyboard shortcuts, Edit page for players/teams.
 
 ### Simulation & World
 - [x] **Match Engine**: Event-driven with rich text commentary.

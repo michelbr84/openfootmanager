@@ -2,6 +2,7 @@ import random
 
 from ..pages.training import TrainingPage
 from .controllerinterface import ControllerInterface
+from ...core.football.training import TrainingManager, TrainingFocus
 
 
 class TrainingController(ControllerInterface):
@@ -9,6 +10,7 @@ class TrainingController(ControllerInterface):
         self.controller = controller
         self.page = page
         self._players = []
+        self._training_manager = TrainingManager()
         self._bind()
 
     def initialize(self):
@@ -28,125 +30,58 @@ class TrainingController(ControllerInterface):
         self.page.train_btn.config(command=self._run_training)
 
     def _load_players(self):
+        """Load squad as PlayerTeam objects via the DB's club loading."""
         team_data = getattr(self.controller, "current_user_team", None)
         if team_data:
-            all_players = self.controller.db.load_players()
-            squad_ids = {p["id"] for p in team_data.get("squad", [])}
-            if squad_ids:
-                self._players = [p for p in all_players if p["id"] in squad_ids]
-            else:
-                self._players = all_players
-        else:
-            self.controller.db.check_clubs_file(amount=50)
-            self._players = self.controller.db.load_players()
+            players_dicts = self.controller.db.load_players()
+            try:
+                club_objects = self.controller.db.load_club_objects(
+                    [team_data], players_dicts
+                )
+                if club_objects:
+                    self._players = list(club_objects[0].squad)
+                    return
+            except Exception:
+                pass
+
+        # Fallback: generate data if needed and load first club
+        self.controller.db.check_clubs_file(amount=50)
+        clubs = self.controller.db.load_clubs()
+        players_dicts = self.controller.db.load_players()
+        if clubs:
+            try:
+                club_objects = self.controller.db.load_club_objects(
+                    [clubs[0]], players_dicts
+                )
+                if club_objects:
+                    self._players = list(club_objects[0].squad)
+                    return
+            except Exception:
+                pass
+        self._players = []
 
     def _run_training(self):
         if not self._players:
             self.page.result_label.config(text="No players available for training.")
             return
 
-        focus = self.page.focus_var.get()
-        sample_size = min(random.randint(3, 5), len(self._players))
-        selected = random.sample(self._players, sample_size)
+        # Map combo box value to TrainingFocus enum
+        focus_str = self.page.focus_var.get()
+        focus_map = {
+            "General": TrainingFocus.GENERAL,
+            "Attack": TrainingFocus.ATTACK,
+            "Defense": TrainingFocus.DEFENSE,
+            "Fitness": TrainingFocus.FITNESS,
+        }
+        focus_enum = focus_map.get(focus_str, TrainingFocus.GENERAL)
 
-        results = []
-        for player in selected:
-            name = player.get("short_name", "Unknown")
-            attrs = player.get("attributes", {})
-            improvements = self._apply_training(focus, attrs)
-            if improvements:
-                imp_str = ", ".join(f"{attr} +{val}" for attr, val in improvements)
-                results.append(f"{name}: {imp_str}")
-            else:
-                results.append(f"{name}: no improvement")
+        # Pick a sample of players (3-5) or use full squad if small
+        if len(self._players) <= 5:
+            selected = list(self._players)
+        else:
+            sample_size = random.randint(3, 5)
+            selected = random.sample(self._players, sample_size)
 
-        result_text = f"Training Session ({focus})\n" + "\n".join(results)
-        self.page.result_label.config(text=result_text)
-
-    def _apply_training(self, focus, attributes):
-        improvements = []
-
-        if focus == "General":
-            improvements = self._train_general(attributes)
-        elif focus == "Attack":
-            improvements = self._train_attack(attributes)
-        elif focus == "Defense":
-            improvements = self._train_defense(attributes)
-        elif focus == "Fitness":
-            improvements = self._train_fitness(attributes)
-
-        return improvements
-
-    def _train_general(self, attributes):
-        improvements = []
-        all_attrs = []
-        for category in ("offensive", "defensive", "intelligence", "physical"):
-            cat_dict = attributes.get(category, {})
-            for attr_name, value in cat_dict.items():
-                all_attrs.append((category, attr_name, value))
-
-        if not all_attrs:
-            return improvements
-
-        count = random.randint(1, 2)
-        chosen = random.sample(all_attrs, min(count, len(all_attrs)))
-        for category, attr_name, value in chosen:
-            boost = random.randint(1, 2)
-            new_value = min(value + boost, 99)
-            attributes[category][attr_name] = new_value
-            improvements.append((attr_name, boost))
-
-        return improvements
-
-    def _train_attack(self, attributes):
-        improvements = []
-        offensive = attributes.get("offensive", {})
-        if not offensive:
-            return improvements
-
-        attrs = list(offensive.items())
-        count = random.randint(1, min(2, len(attrs)))
-        chosen = random.sample(attrs, count)
-        for attr_name, value in chosen:
-            boost = random.randint(1, 3)
-            new_value = min(value + boost, 99)
-            offensive[attr_name] = new_value
-            improvements.append((attr_name, boost))
-
-        return improvements
-
-    def _train_defense(self, attributes):
-        improvements = []
-        defensive = attributes.get("defensive", {})
-        if not defensive:
-            return improvements
-
-        attrs = list(defensive.items())
-        count = random.randint(1, min(2, len(attrs)))
-        chosen = random.sample(attrs, count)
-        for attr_name, value in chosen:
-            boost = random.randint(1, 3)
-            new_value = min(value + boost, 99)
-            defensive[attr_name] = new_value
-            improvements.append((attr_name, boost))
-
-        return improvements
-
-    def _train_fitness(self, attributes):
-        improvements = []
-        physical = attributes.get("physical", {})
-        fitness_attrs = {}
-        for attr_name in ("endurance", "strength"):
-            if attr_name in physical:
-                fitness_attrs[attr_name] = physical[attr_name]
-
-        if not fitness_attrs:
-            return improvements
-
-        for attr_name, value in fitness_attrs.items():
-            boost = random.randint(2, 4)
-            new_value = min(value + boost, 99)
-            physical[attr_name] = new_value
-            improvements.append((attr_name, boost))
-
-        return improvements
+        session = self._training_manager.train_squad(selected, focus_enum, intensity=0.8)
+        report = self._training_manager.get_training_report(session)
+        self.page.result_label.config(text=report)
