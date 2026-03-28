@@ -21,9 +21,12 @@ class HomePage(ttk.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Center the layout by configuring column weight
+        self.columnconfigure(0, weight=1)
+
         self.logo = ttk.PhotoImage(file="ofm/res/images/openfoot.png")
 
-        self.logo_label = ttk.Label(self, image=self.logo)
+        self.logo_label = ttk.Label(self, image=self.logo, anchor=CENTER)
         self.logo_label.grid(row=0, column=0, padx=20, pady=75, sticky=NSEW)
 
         self.debug_mode_btn = ttk.Button(self, text="Start Debug Mode")
@@ -37,3 +40,9 @@ class HomePage(ttk.Frame):
 
         self.settings_btn = ttk.Button(self, text="Settings")
         self.settings_btn.grid(row=4, column=0, padx=120, pady=15, sticky=NSEW)
+
+        self.version_label = ttk.Label(
+            self, text="v0.2.0 - Debug Mode", font=("TkDefaultFont", 9),
+            anchor=CENTER, foreground="gray"
+        )
+        self.version_label.grid(row=5, column=0, padx=20, pady=(30, 10), sticky=EW)

@@ -73,10 +73,15 @@ class GUI:
 
         self.window.minsize(width, height)
         self.window.geometry("")
+        self.window.resizable(True, True)
         self.fix_scaling()
 
         self.window.rowconfigure(0, weight=1)
         self.window.columnconfigure(0, weight=1)
+
+        # Keyboard shortcut: Escape to go back to home
+        self._page_history = []
+        self.window.bind("<Escape>", self._on_escape)
 
         self.style = ttk.Style()
 
@@ -98,7 +103,14 @@ class GUI:
             "stats_explorer": self._add_frame(StatsExplorerPage),
         }
 
+        # Reverse lookup: frame -> page name
+        self._page_names = {v: k for k, v in self.pages.items()}
+
         self.current_page = self.pages["home"]
+
+        # Status bar at the bottom of the window
+        self.status_bar = ttk.Label(self.window, text="Ready", relief="sunken", anchor=W)
+        self.status_bar.grid(row=1, column=0, sticky=EW)
 
     def fix_scaling(self):
         import tkinter.font
@@ -115,9 +127,32 @@ class GUI:
         f = frame(self.window)
         return f
 
+    def _on_escape(self, event=None):
+        """Handle Escape key: go back to the previous page, or home if no history."""
+        if self._page_history:
+            previous = self._page_history.pop()
+            self.current_page.grid_forget()
+            self.current_page = self.pages[previous]
+            self.current_page.grid(row=0, column=0)
+            self.window.geometry("")
+            self.current_page.tkraise()
+            self.update_status(f"Navigated back to {previous}")
+        elif self._page_names.get(self.current_page) != "home":
+            self.switch("home")
+
+    def update_status(self, text: str):
+        """Update the status bar text."""
+        self.status_bar.config(text=text)
+
     def switch(self, name: str):
+        # Record current page in history for Escape navigation
+        current_name = self._page_names.get(self.current_page)
+        if current_name and current_name != name:
+            self._page_history.append(current_name)
+
         self.current_page.grid_forget()
         self.current_page = self.pages[name]
         self.current_page.grid(row=0, column=0)
         self.window.geometry("")
         self.current_page.tkraise()
+        self.update_status(f"Page: {name}")
