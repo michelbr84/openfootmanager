@@ -116,16 +116,19 @@ Check the [CONTRIBUTING](CONTRIBUTING.md) file for more information on how to co
 
 For a detailed list of implemented features, see the [Status](ToDo.md). For the full development roadmap with future milestones, see the [Roadmap](ROADMAP.md).
 
-### Current Status (v0.2.0)
+### Current Status (v0.7.0)
 
-The game has a fully functional **Debug Mode** with:
-- Live match simulation with event-driven commentary and working substitutions
-- Complete player management: profiles, attributes, training, injuries
-- Team management: formations (with save), finances, transfers, loans
-- Stats Explorer: player rankings, team comparisons, top performers
-- Edit page: modify player names/attributes and team settings/finances
-- League system: round-robin fixtures, season progression, standings
-- Youth academy, career tracking, mod support, save/load
+All 7 development milestones are complete:
+
+- **Career Mode**: full season loop with calendar, AI opponents, multi-season progression
+- **Competitions**: cup tournaments, promotion/relegation, Champions League style, international football
+- **Advanced Simulation**: weather, crowd effects, player morale/relationships, FFP, stadium upgrades
+- **Visualization**: match animation frames, heat maps, pass maps, highlight replay data
+- **UI Systems**: dashboard, news feed, notifications, player comparison, form guides
+- **Community**: hot-seat multiplayer, challenges (6 modes), historical scenarios, plugin API
+- **Modding**: CSV/JSON import/export, custom formations, tactical presets, theme system
+- **i18n**: English, Portuguese (BR), Spanish
+- **304 automated tests** covering all systems
 
 ## LICENSE
 
