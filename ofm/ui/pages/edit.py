@@ -57,9 +57,45 @@ class EditPage(ttk.Frame):
         self.player_combo = ttk.Combobox(tab, state="readonly", width=40)
         self.player_combo.grid(row=0, column=1, padx=5, pady=5, sticky=EW)
 
+        # Name fields
+        names_frame = ttk.Frame(tab)
+        names_frame.grid(row=1, column=0, columnspan=2, padx=5, pady=5, sticky=EW)
+
+        ttk.Label(names_frame, text="First Name:").grid(row=0, column=0, padx=5, pady=2, sticky=W)
+        self.first_name_entry = ttk.Entry(names_frame, width=20)
+        self.first_name_entry.grid(row=0, column=1, padx=5, pady=2)
+
+        ttk.Label(names_frame, text="Last Name:").grid(row=0, column=2, padx=5, pady=2, sticky=W)
+        self.last_name_entry = ttk.Entry(names_frame, width=20)
+        self.last_name_entry.grid(row=0, column=3, padx=5, pady=2)
+
+        ttk.Label(names_frame, text="Short Name:").grid(row=0, column=4, padx=5, pady=2, sticky=W)
+        self.short_name_entry = ttk.Entry(names_frame, width=20)
+        self.short_name_entry.grid(row=0, column=5, padx=5, pady=2)
+
+        # Extra player info fields
+        info_frame = ttk.Frame(tab)
+        info_frame.grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky=EW)
+
+        ttk.Label(info_frame, text="Nationality:").grid(row=0, column=0, padx=5, pady=2, sticky=W)
+        self.nationality_entry = ttk.Entry(info_frame, width=20)
+        self.nationality_entry.grid(row=0, column=1, padx=5, pady=2)
+
+        ttk.Label(info_frame, text="Date of Birth:").grid(row=0, column=2, padx=5, pady=2, sticky=W)
+        self.dob_entry = ttk.Entry(info_frame, width=20)
+        self.dob_entry.grid(row=0, column=3, padx=5, pady=2)
+
+        ttk.Label(info_frame, text="Value:").grid(row=0, column=4, padx=5, pady=2, sticky=W)
+        self.value_entry = ttk.Entry(info_frame, width=12)
+        self.value_entry.grid(row=0, column=5, padx=5, pady=2)
+
+        ttk.Label(info_frame, text="Potential:").grid(row=0, column=6, padx=5, pady=2, sticky=W)
+        self.potential_entry = ttk.Entry(info_frame, width=8)
+        self.potential_entry.grid(row=0, column=7, padx=5, pady=2)
+
         # Top-level attributes row
         top_frame = ttk.Frame(tab)
-        top_frame.grid(row=1, column=0, columnspan=2, padx=5, pady=5, sticky=EW)
+        top_frame.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky=EW)
 
         ttk.Label(top_frame, text="Fitness:").grid(row=0, column=0, padx=5, pady=2, sticky=W)
         self.fitness_entry = ttk.Entry(top_frame, width=8)
@@ -75,8 +111,8 @@ class EditPage(ttk.Frame):
 
         # Scrollable area for attribute groups
         attr_frame = ttk.Frame(tab)
-        attr_frame.grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky=NSEW)
-        tab.rowconfigure(2, weight=1)
+        attr_frame.grid(row=4, column=0, columnspan=2, padx=5, pady=5, sticky=NSEW)
+        tab.rowconfigure(4, weight=1)
 
         # Store all attribute entries in dicts for easy access
         self.offensive_entries = {}
@@ -132,7 +168,11 @@ class EditPage(ttk.Frame):
 
         # Save button
         self.save_player_btn = ttk.Button(tab, text="Save Player")
-        self.save_player_btn.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky=EW)
+        self.save_player_btn.grid(row=5, column=0, columnspan=2, padx=10, pady=10, sticky=EW)
+
+        # Status label
+        self.player_status_label = ttk.Label(tab, text="", foreground="green")
+        self.player_status_label.grid(row=6, column=0, columnspan=2, padx=10, pady=(0, 5), sticky=EW)
 
     # ------------------------------------------------------------------
     # Team tab
@@ -166,6 +206,37 @@ class EditPage(ttk.Frame):
         self.formation_combo = ttk.Combobox(tab, state="readonly", width=20)
         self.formation_combo.grid(row=4, column=1, padx=5, pady=5, sticky=W)
 
+        # Country
+        ttk.Label(tab, text="Country:").grid(row=5, column=0, padx=5, pady=5, sticky=W)
+        self.country_entry = ttk.Entry(tab)
+        self.country_entry.grid(row=5, column=1, padx=5, pady=5, sticky=EW)
+
+        # Location
+        ttk.Label(tab, text="Location:").grid(row=6, column=0, padx=5, pady=5, sticky=W)
+        self.location_entry = ttk.Entry(tab)
+        self.location_entry.grid(row=6, column=1, padx=5, pady=5, sticky=EW)
+
+        # Finances
+        fin_frame = ttk.LabelFrame(tab, text="Finances")
+        fin_frame.grid(row=7, column=0, columnspan=2, padx=5, pady=5, sticky=EW)
+        fin_frame.columnconfigure(1, weight=1)
+
+        ttk.Label(fin_frame, text="Balance:").grid(row=0, column=0, padx=5, pady=2, sticky=W)
+        self.balance_entry = ttk.Entry(fin_frame, width=15)
+        self.balance_entry.grid(row=0, column=1, padx=5, pady=2, sticky=W)
+
+        ttk.Label(fin_frame, text="Transfer Budget:").grid(row=0, column=2, padx=5, pady=2, sticky=W)
+        self.transfer_budget_entry = ttk.Entry(fin_frame, width=15)
+        self.transfer_budget_entry.grid(row=0, column=3, padx=5, pady=2, sticky=W)
+
+        ttk.Label(fin_frame, text="Wage Budget:").grid(row=0, column=4, padx=5, pady=2, sticky=W)
+        self.wage_budget_entry = ttk.Entry(fin_frame, width=15)
+        self.wage_budget_entry.grid(row=0, column=5, padx=5, pady=2, sticky=W)
+
         # Save button
         self.save_team_btn = ttk.Button(tab, text="Save Team")
-        self.save_team_btn.grid(row=5, column=0, columnspan=2, padx=10, pady=10, sticky=EW)
+        self.save_team_btn.grid(row=8, column=0, columnspan=2, padx=10, pady=10, sticky=EW)
+
+        # Status label
+        self.team_status_label = ttk.Label(tab, text="", foreground="green")
+        self.team_status_label.grid(row=9, column=0, columnspan=2, padx=10, pady=(0, 5), sticky=EW)

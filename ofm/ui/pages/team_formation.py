@@ -30,6 +30,12 @@ class TeamFormationPage(ttk.Frame):
         self.cancel_btn = ttk.Button(self.button_frame, text="Back")
         self.cancel_btn.pack(side="left", padx=10)
 
+        self.save_btn = ttk.Button(self.button_frame, text="Save Formation", bootstyle="success")
+        self.save_btn.pack(side="left", padx=10)
+
         self.button_frame.grid(
             row=3, column=0, columnspan=2, padx=10, pady=10, sticky=NS
         )
+
+        self.status_label = ttk.Label(self, text="", font=("Helvetica", 11))
+        self.status_label.grid(row=4, column=0, columnspan=2, padx=10, pady=5, sticky=NS)

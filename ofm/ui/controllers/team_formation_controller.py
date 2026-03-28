@@ -1,3 +1,5 @@
+import json
+
 from ..pages.team_formation import TeamFormationPage
 from .controllerinterface import ControllerInterface
 from ...core.football.formation import Formation, FORMATION_STRINGS
@@ -12,6 +14,8 @@ class TeamFormationController(ControllerInterface):
     def initialize(self):
         self.page.formation_combobox['values'] = FORMATION_STRINGS
         
+        self.page.status_label.config(text="")
+
         team_data = self.controller.current_user_team
         if not team_data:
              # If no team selected, maybe show empty or error?
@@ -66,6 +70,34 @@ class TeamFormationController(ControllerInterface):
     def go_to_debug_home_page(self):
         self.switch("debug_home")
 
+    def _save_formation(self):
+        team_data = self.controller.current_user_team
+        if not team_data:
+            self.page.status_label.config(text="No team selected. Select a team first.")
+            return
+
+        formation_str = self.page.formation_combobox.get()
+        if not formation_str:
+            return
+
+        # Update the current_user_team dict
+        team_data["default_formation"] = formation_str
+
+        # Persist to clubs.json
+        clubs = self.controller.db.load_clubs()
+        for club in clubs:
+            if club["id"] == team_data["id"]:
+                club["default_formation"] = formation_str
+                break
+
+        with open(self.controller.db.clubs_file, "w", encoding="utf-8") as fp:
+            json.dump(clubs, fp)
+
+        self.page.status_label.config(
+            text=f"Formation '{formation_str}' saved successfully!"
+        )
+
     def _bind(self):
         self.page.cancel_btn.config(command=self.go_to_debug_home_page)
         self.page.formation_combobox.bind("<<ComboboxSelected>>", self.on_formation_change)
+        self.page.save_btn.config(command=self._save_formation)

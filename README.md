@@ -114,7 +114,18 @@ Check the [CONTRIBUTING](CONTRIBUTING.md) file for more information on how to co
 
 ## FEATURES
 
-For a detailed list of implemented and planned features, please refer to the [To-Do List](ToDo.md).
+For a detailed list of implemented features, see the [Status](ToDo.md). For the full development roadmap with future milestones, see the [Roadmap](ROADMAP.md).
+
+### Current Status (v0.2.0)
+
+The game has a fully functional **Debug Mode** with:
+- Live match simulation with event-driven commentary and working substitutions
+- Complete player management: profiles, attributes, training, injuries
+- Team management: formations (with save), finances, transfers, loans
+- Stats Explorer: player rankings, team comparisons, top performers
+- Edit page: modify player names/attributes and team settings/finances
+- League system: round-robin fixtures, season progression, standings
+- Youth academy, career tracking, mod support, save/load
 
 ## LICENSE
 
