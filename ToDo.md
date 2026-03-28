@@ -2,11 +2,11 @@
 
 This document tracks the current status of the OpenFoot Manager project, distinguishing between what is already implemented and what is planned for future releases.
 
-## ✅ Implemented Features
+## Implemented Features
 
 ### Core Mechanics
 - [x] **Club Structure**: Basic class structure for clubs.
-- [x] **Player System**: 
+- [x] **Player System**:
     - [x] Player generation/attributes.
     - [x] Positions definition.
     - [x] Contracts structure.
@@ -15,54 +15,72 @@ This document tracks the current status of the OpenFoot Manager project, disting
     - [x] Formation system (4-4-2, 4-3-3, etc.).
 - [x] **Simulation**:
     - [x] Basic team simulation engine.
+    - [x] Event-driven match engine (Pass, Shot, Dribble, Cross, Foul, CornerKick, FreeKick, GoalKick, PenaltyKick).
+- [x] **Finances**: Basic financial model (FinanceManager with income/expense tracking).
+- [x] **Database**: Comprehensive database of fictitious players with JSON persistence.
 
 ### User Interface (UI)
-- [x] **Navigation**: Basic page navigation system.
-- [x] **Pages**:
+- [x] **Navigation**: MVC page navigation system with OFMController.
+- [x] **Pages (all functional in Debug Mode)**:
     - [x] Home Page.
-    - [x] Team Selection screen.
-    - [x] Player Profile view.
-    - [x] Team Explorer.
-    - [x] Settings page.
-    - [x] Finances page.
-    - [x] Transfer Market page.
-    - [x] Training page.
-    - [x] League Table page.
+    - [x] Team Selection screen (load from DB, select team).
+    - [x] Player Profile view (load from DB, display all attributes).
+    - [x] Team Explorer (filter by country, browse squads with stats).
+    - [x] Team Formation (change formation, view starting 11 + bench).
+    - [x] Settings page (theme selection).
+    - [x] Finances page (balance display, sample transactions).
+    - [x] Transfer Market page (search players, browse with stats).
+    - [x] Training page (run sessions by focus, attribute improvement simulation).
+    - [x] League Table page (club standings display).
+    - [x] Championship page (tournament standings display).
+    - [x] Stats Explorer (player rankings, team comparison, top performers).
+    - [x] Match Visualizer (2D pitch with formation dots).
 - [x] **Debug Tools**:
-    - [x] Debug Home.
-    - [x] Debug Match view.
+    - [x] Debug Home (navigation hub for all debug pages).
+    - [x] Debug Match view (live simulation, commentary, stats, substitutions).
+- [x] **Themes**: Custom "football" and "darkfootball" ttkbootstrap themes.
+
+### Testing
+- [x] **Test Coverage**: pytest + Hypothesis for core mechanics (144+ tests).
+- [x] **CI/CD**: GitHub Actions pipeline (flake8 + pytest).
+
+### Developer Tooling
+- [x] **ClaudeMaxPower**: Multi-agent team framework with hooks, skills, and auto-dream memory.
 
 ---
 
-## 🚀 Planned Features
+## Planned Features
 
 ### Management & Strategy
-- [x] **Finances**: Complete financial management system (incomes/expenses).
-- [x] **Transfer Market**: 
-    - [x] Hire and fire players.
-    - [x] Loan system.
-- [x] **Roster Management**: Deep capability to choose formations and specific player roles.
-- [x] **Training**: Organize practice sessions to develop player attributes.
-- [x] **Youth Academy**: Scout and recruit new young talents.
-- [x] **Career Progression**: 
-    - [x] Qualify for major leagues/championchips.
-    - [x] Win trophies.
-    - [x] National Team management.
+- [ ] **Finances**: Complete financial management with season budgets, wage bills, match-day revenue.
+- [ ] **Transfer Market**:
+    - [ ] Hire and fire players with actual transfers.
+    - [ ] Loan system.
+    - [ ] Transfer negotiations and bidding.
+- [ ] **Roster Management**: Drag-and-drop formation editor, player role assignment.
+- [ ] **Training**: Persistent training sessions that modify player attributes over time.
+- [ ] **Youth Academy**: Scout and recruit new young talents.
+- [ ] **Career Progression**:
+    - [ ] Qualify for major leagues/championships.
+    - [ ] Win trophies.
+    - [ ] National Team management.
 
 ### Simulation & World
-- [x] **Match Engine**:
-    - [x] "Match Live Events" (Text-based commentary/description).
-    - [x] 3D Match Simulation (Long term goal).
-- [x] **World Simulation**: Simulate results of other games in the league/world.
-- [x] **Interactions**: Talk to the press and players.
-- [x] **Database**: Comprehensive database of fictitious players.
-- [x] **Expansion**:
-    - [x] Expanded database.
-    - [x] Sponsorship mechanics.
-    - [x] Mod support.
+- [ ] **Match Engine**:
+    - [ ] "Match Live Events" with richer text commentary.
+    - [ ] 3D Match Simulation (Long term goal).
+- [ ] **World Simulation**: Simulate results of other games in the league/world.
+- [ ] **Season Progression**: Multi-round league/championship with points, standings, promotions.
+- [ ] **Interactions**: Talk to the press and players.
+- [ ] **Expansion**:
+    - [ ] Expanded database with more leagues/countries.
+    - [ ] Sponsorship mechanics.
+    - [ ] Mod support.
 
 ---
 
-## 🛠 Technical / Maintenance
-- [x] **Testing**: Increase unit test coverage for core mechanics.
-- [x] **UI/UX**: Improve visual design and user feedback.
+## Technical / Maintenance
+- [ ] **Testing**: Increase unit test coverage for UI controllers.
+- [ ] **UI/UX**: Improve visual design, responsive layouts, accessibility.
+- [ ] **Persistence**: Save/Load game state.
+- [ ] **Performance**: Optimize large squad generation and match simulation.

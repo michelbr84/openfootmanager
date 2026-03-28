@@ -140,3 +140,17 @@ Pipfile.lock
 
 ofm/res/db/**
 **/settings.yaml
+
+# ClaudeMaxPower / Claude Code
+.estado.md
+.dream-state.json
+.claude/audit.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor swap files
+*.swp
+*.swo
+*~

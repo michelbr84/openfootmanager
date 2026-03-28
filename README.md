@@ -134,4 +134,3 @@ For a detailed list of implemented and planned features, please refer to the [To
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Check [LICENSE](LICENSE.md) for more information.
-# openfootmanager
