@@ -388,7 +388,7 @@ class DebugMatchController(ControllerInterface):
         self.open_substitution_window(self.live_game.engine.away_team)
 
     def go_to_debug_home_page(self):
-        self.switch("debug_home")
+        self.switch(self.controller.get_back_page())
 
     def _bind(self):
         self.page.play_game_btn.config(command=self.start_match)

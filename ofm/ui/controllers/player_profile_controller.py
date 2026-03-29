@@ -41,7 +41,7 @@ class PlayerProfilePageController(ControllerInterface):
             self._update_profile(self._players[0])
 
     def go_to_debug_page(self):
-        self.switch("debug_home")
+        self.switch(self.controller.get_back_page())
 
     def _bind(self):
         self.page.cancel_btn.config(command=self.go_to_debug_page)

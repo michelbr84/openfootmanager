@@ -257,7 +257,7 @@ class CareerDashboardController(ControllerInterface):
         self.switch("team_formation")
 
     def _go_to_youth(self):
-        self.switch("debug_home")
+        self.switch("career_dashboard")
 
     def _go_to_main_menu(self):
         self.switch("home")

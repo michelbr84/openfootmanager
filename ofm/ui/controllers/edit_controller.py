@@ -215,7 +215,7 @@ class EditController(ControllerInterface):
         self.page.team_combo.bind("<<ComboboxSelected>>", self._on_team_select)
         self.page.save_player_btn.config(command=self._save_player)
         self.page.save_team_btn.config(command=self._save_team)
-        self.page.cancel_btn.config(command=lambda: self.switch("debug_home"))
+        self.page.cancel_btn.config(command=lambda: self.switch(self.controller.get_back_page()))
 
     @staticmethod
     def _set_entry(entry, value):

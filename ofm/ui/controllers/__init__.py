@@ -90,6 +90,14 @@ class OFMController(ControllerInterface):
             ),
         }
 
+    @property
+    def is_career_active(self) -> bool:
+        return self.career_engine is not None
+
+    def get_back_page(self) -> str:
+        """Return the correct 'back' destination depending on game mode."""
+        return "career_dashboard" if self.is_career_active else "debug_home"
+
     def initialize(self):
         pass
 

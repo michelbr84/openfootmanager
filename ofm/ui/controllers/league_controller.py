@@ -37,7 +37,7 @@ class LeagueController(ControllerInterface):
         self.controller.switch(page)
 
     def go_to_debug_home_page(self):
-        self.switch("debug_home")
+        self.switch(self.controller.get_back_page())
 
     def _bind(self):
         self.page.back_btn.config(command=self.go_to_debug_home_page)

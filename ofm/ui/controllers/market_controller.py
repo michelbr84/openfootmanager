@@ -136,4 +136,4 @@ class MarketController(ControllerInterface):
         self.controller.switch(page)
 
     def go_to_debug_home_page(self):
-        self.switch("debug_home")
+        self.switch(self.controller.get_back_page())

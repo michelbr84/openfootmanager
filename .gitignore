@@ -139,6 +139,7 @@ node_modules/
 Pipfile.lock
 
 ofm/res/db/**
+ofm/save/
 **/settings.yaml
 
 # ClaudeMaxPower / Claude Code
