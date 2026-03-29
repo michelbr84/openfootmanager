@@ -668,7 +668,7 @@ class CareerEngine:
         self.player_relationships = PlayerRelationships()
         self.career_events = PlayerCareerEvents()
         self.ffp_checker = FFPChecker()
-        self.stadium_manager = StadiumManager(stadium_capacity=0)
+        self.stadium_manager = StadiumManager(current_capacity=0)
 
         # News / event feed
         self.news_feed: list[dict] = []
