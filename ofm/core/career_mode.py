@@ -96,9 +96,10 @@ class SeasonCalendar:
     season formally ends on May 31.
     """
 
-    def __init__(self, season_year: int, league: League):
+    def __init__(self, season_year: int, league: League, season: Optional[Season] = None):
         self.season_year = season_year
         self.league = league
+        self.season = season
         self.events: list[CalendarEvent] = []
 
     # -- generation ---------------------------------------------------------
@@ -119,8 +120,12 @@ class SeasonCalendar:
             current += datetime.timedelta(days=1)
 
         # --- assign league rounds to Saturdays -------------------------------
-        season = Season(self.league)
-        season.setup_season()
+        # Re-use the existing Season so fixture UUIDs are consistent
+        # with the rest of the CareerEngine.
+        season = self.season
+        if season is None:
+            season = Season(self.league)
+            season.setup_season()
         total_rounds = len(season.rounds)
 
         # Spread rounds evenly across available Saturdays
@@ -739,7 +744,7 @@ class CareerEngine:
 
         # --- calendar ---
         year = datetime.date.today().year
-        self.calendar = SeasonCalendar(year, self.league)
+        self.calendar = SeasonCalendar(year, self.league, self.season)
         self.calendar.generate_calendar()
 
         # --- date ---
@@ -1333,7 +1338,7 @@ class CareerEngine:
         self.season.setup_season()
 
         # --- new calendar ---
-        self.calendar = SeasonCalendar(new_year, self.league)
+        self.calendar = SeasonCalendar(new_year, self.league, self.season)
         self.calendar.generate_calendar()
 
         # --- reset date ---
