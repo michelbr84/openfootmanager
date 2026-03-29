@@ -1,18 +1,22 @@
-# OpenFoot Manager — Status
+# OpenFoot Manager — Status & To-Do
 
-All milestones complete. See **[ROADMAP.md](ROADMAP.md)** for full details.
+For the complete project status, roadmap, and honest assessment of what's wired end-to-end vs backend-only, see **[ROADMAP.md](ROADMAP.md)**.
 
----
+## Quick Summary
 
-## Milestone 1: Foundation — COMPLETE
-## Milestone 2: Game Systems — COMPLETE
-## Milestone 3: Career Mode — COMPLETE
-## Milestone 4: Competitions — COMPLETE
-## Milestone 5: Advanced Simulation — COMPLETE
-## Milestone 6: Visualization & UI Polish — COMPLETE
-## Milestone 7: Community & Extensibility — COMPLETE
-## Technical Debt & Maintenance — COMPLETE
+**What works (user can do it):**
+- New Game → select league/club → Career Dashboard → advance days → play matches → save/load
+- Full Debug Mode with 15+ pages (match sim, training, stats, edit, formations, etc.)
+- 304 automated tests, all passing
 
----
+**What's built but needs UI wiring:**
+- Competitions (cups, promotion/relegation, Champions League, World Cup)
+- Weather, crowd, morale, relationships, agent demands, FFP, stadium upgrades
+- Match animation data, heat maps, highlights
+- Challenges, multiplayer, modding tools, i18n (3 languages)
 
-**304 tests passing** | **v0.7.0** | Next: **v1.0.0 Stable Release**
+**What's not built yet:**
+- Dedicated UI pages for: Youth Academy, Press Conference, Transfer Negotiation, Loan Management, Injury List, Match Replay Viewer
+- 3D match visualization renderer
+- Drag-and-drop formation editor
+- Package distribution, Sphinx docs

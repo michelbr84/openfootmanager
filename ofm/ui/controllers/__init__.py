@@ -33,6 +33,9 @@ from .training_controller import TrainingController
 from .league_controller import LeagueController
 from .visualizer_controller import VisualizerController
 from .edit_controller import EditController
+from .new_game_controller import NewGameController
+from .load_game_controller import LoadGameController
+from .career_dashboard_controller import CareerDashboardController
 
 
 class OFMController(ControllerInterface):
@@ -45,6 +48,7 @@ class OFMController(ControllerInterface):
         self.db = db
         self.gui = GUI()
         self.current_user_team = None
+        self.career_engine = None
         self.controllers = {
             "home": HomePageController(self, self.gui.pages["home"]),
             "debug_home": DebugPageController(self, self.gui.pages["debug_home"]),
@@ -79,6 +83,11 @@ class OFMController(ControllerInterface):
                 self.gui.pages["team_explorer"],
             ),
             "edit": EditController(self, self.gui.pages["edit"]),
+            "new_game": NewGameController(self, self.gui.pages["new_game"]),
+            "load_game": LoadGameController(self, self.gui.pages["load_game"]),
+            "career_dashboard": CareerDashboardController(
+                self, self.gui.pages["career_dashboard"]
+            ),
         }
 
     def initialize(self):

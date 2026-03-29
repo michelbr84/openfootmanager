@@ -29,3 +29,6 @@ from .training import TrainingPage
 from .visualizer import VisualizerPage
 from .team_formation import TeamFormationPage
 from .edit import EditPage
+from .new_game import NewGamePage
+from .load_game import LoadGamePage
+from .career_dashboard import CareerDashboardPage

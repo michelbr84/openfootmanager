@@ -8,25 +8,29 @@ class ChampionshipController(ControllerInterface):
         self._bind()
 
     def initialize(self):
-        self.controller.db.check_clubs_file(amount=50)
-        clubs = self.controller.db.load_clubs()
-        
-        # We need to sort or simulate points. For now, we just list them initialized.
-        # In a real scenario, this would read from the League class which tracks points.
-        # Since we just want "consistency" with Team Selection, we list the clubs.
-        # We can randomize points or just show 0 to show they exist.
-        
-        # Let's create dummy standings based on the clubs loaded
-        standings = []
-        for i, club in enumerate(clubs, 1):
-            # pos, name, played, won, drawn, lost, points
-            standings.append((i, club["name"], 0, 0, 0, 0, 0))
-
-        for i in self.page.tree.get_children():
-            self.page.tree.delete(i)
-            
-        for team in standings:
-            self.page.tree.insert("", "end", values=team)
+        career = getattr(self.controller, "career_engine", None)
+        if career and career.season:
+            standings = career.get_standings()
+            for i in self.page.tree.get_children():
+                self.page.tree.delete(i)
+            for entry in standings:
+                self.page.tree.insert("", "end", values=(
+                    entry["position"], entry["club"], entry["played"],
+                    entry["won"], entry["drawn"], entry["lost"],
+                    entry["points"]
+                ))
+        else:
+            # Fallback: debug mode with dummy data
+            self.controller.db.check_clubs_file(amount=50)
+            clubs = self.controller.db.load_clubs()
+            standings = []
+            for i, club in enumerate(clubs, 1):
+                # pos, name, played, won, drawn, lost, points
+                standings.append((i, club["name"], 0, 0, 0, 0, 0))
+            for i in self.page.tree.get_children():
+                self.page.tree.delete(i)
+            for team in standings:
+                self.page.tree.insert("", "end", values=team)
 
     def switch(self, page):
         self.controller.switch(page)

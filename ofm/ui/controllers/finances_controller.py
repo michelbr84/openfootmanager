@@ -11,6 +11,38 @@ class FinancesController(ControllerInterface):
         self._bind()
 
     def initialize(self):
+        career = getattr(self.controller, "career_engine", None)
+        if career and career.season:
+            self._initialize_career_mode(career)
+        else:
+            self._initialize_debug_mode()
+
+    def _initialize_career_mode(self, career):
+        """Show real finance data from the career engine."""
+        club_info = career.get_player_club()
+        if club_info is None:
+            self.page.balance_label.config(text="Balance: $0.00")
+            return
+
+        balance = club_info["balance"]
+        self.page.balance_label.config(text=f"Balance: ${balance:,.2f}")
+
+        # Clear existing items in the treeview
+        for item in self.page.trans_list.get_children():
+            self.page.trans_list.delete(item)
+
+        # Get real transactions from the club's FinanceManager
+        player_club = career._club_map.get(career.player_club_id)
+        if player_club and player_club.finances and player_club.finances.transactions:
+            for t in player_club.finances.transactions:
+                trans_type = t.type.value  # "Income" or "Expense"
+                amount_str = f"${t.amount:,.2f}" if t.amount >= 0 else f"-${abs(t.amount):,.2f}"
+                self.page.trans_list.insert("", "end", values=(trans_type, amount_str, t.description))
+        else:
+            self.page.trans_list.insert("", "end", values=("", "", "No transactions yet"))
+
+    def _initialize_debug_mode(self):
+        """Fallback: generate sample transactions for debug mode."""
         club = self._get_club()
         if club is None:
             self.page.balance_label.config(text="Balance: $0.00")

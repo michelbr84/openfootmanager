@@ -118,16 +118,13 @@ For a detailed list of implemented features, see the [Status](ToDo.md). For the 
 
 ### Current Status (v0.7.0)
 
-All 7 development milestones are complete:
+**Playable career mode** — start a new game, select a league and club, manage through a season:
 
-- **Career Mode**: full season loop with calendar, AI opponents, multi-season progression
-- **Competitions**: cup tournaments, promotion/relegation, Champions League style, international football
-- **Advanced Simulation**: weather, crowd effects, player morale/relationships, FFP, stadium upgrades
-- **Visualization**: match animation frames, heat maps, pass maps, highlight replay data
-- **UI Systems**: dashboard, news feed, notifications, player comparison, form guides
-- **Community**: hot-seat multiplayer, challenges (6 modes), historical scenarios, plugin API
-- **Modding**: CSV/JSON import/export, custom formations, tactical presets, theme system
-- **i18n**: English, Portuguese (BR), Spanish
+- **New Game / Load Game**: fully functional from the home screen
+- **Career Dashboard**: league standings, fixtures, results, news feed, advance days, play matches, save game
+- **Match Simulation**: live event-driven engine with commentary, substitutions, stats
+- **Debug Mode**: 15+ pages for testing all systems (formation, training, stats, edit, etc.)
+- **Backend systems**: competitions, weather, morale, transfers, loans, youth academy, modding, i18n (see [ROADMAP.md](ROADMAP.md) for full status)
 - **304 automated tests** covering all systems
 
 ## LICENSE

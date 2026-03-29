@@ -1,196 +1,181 @@
-# OpenFoot Manager Roadmap
+# OpenFoot Manager — Project Status & Roadmap
 
-This document outlines the development roadmap for OpenFoot Manager, organized by milestones.
+This document provides an **honest assessment** of what's built, what's wired end-to-end, and what remains. Items are marked with their true integration status:
+
+- **E2E** = Backend + UI + Controller all connected, user can actually use it
+- **Backend** = Core module exists and tested, but not yet wired to a UI page
+- **Framework** = Class/structure exists as a foundation for future work
 
 ---
 
-## Milestone 1: Foundation (COMPLETE)
+## What Works End-to-End (User Can Do This)
 
-Core infrastructure and debug mode with all pages functional.
+### Game Flow
+- [x] **New Game** (E2E): Enter manager name, select league, select club, start career
+- [x] **Load Game** (E2E): Browse saved games, load, delete
+- [x] **Save Game** (E2E): Save from career dashboard
+- [x] **Career Dashboard** (E2E): View standings, fixtures, results, news; advance days; play matches
 
-- [x] Player system: generation, attributes (22 across 5 groups), positions, contracts, injuries
-- [x] Club structure: squad, finances, stadium
-- [x] Formation system: 8 formations with auto-select, swap, bench management
-- [x] Event-driven match engine: Pass, Shot, Dribble, Cross, Foul, set pieces
-- [x] Team strategies: Normal, Keep Possession, Counter Attack with transition matrices
-- [x] Rich commentary: varied templates for all event types
-- [x] JSON database: fictitious players with persistence
-- [x] MVC UI framework: ttkbootstrap with custom themes
-- [x] All Debug Mode pages: Home, Team Selection, Player Profile, Team Explorer, Formation, Settings, Finances, Market, Training, League, Championship, Stats Explorer, Visualizer, Match, Edit
-- [x] 212+ automated tests (pytest + Hypothesis)
-- [x] CI/CD: GitHub Actions with flake8 + pytest
+### Debug Mode (All E2E)
+- [x] Match Simulation: live event-driven match with commentary, stats, working substitutions
+- [x] Team Selection: browse and select clubs from DB
+- [x] Team Formation: change formation, view starting 11 + bench, **save to DB**
+- [x] Player Profile: browse all players, view all 22 attributes
+- [x] Team Explorer: filter by country, view squad rosters with overalls
+- [x] Stats Explorer: player rankings (filter/sort), team comparison, top performers
+- [x] Match Visualizer: 2D pitch with formation-correct player positions
+- [x] Edit Page: edit player names/attributes/value, team name/stadium/finances/formation
+- [x] Training: run sessions via core TrainingManager with age/potential factors
+- [x] Transfer Market: browse and search players with stats
+- [x] Finances: real data in career mode, sample data in debug mode
+- [x] League Table: real standings in career mode, placeholder in debug mode
+- [x] Championship: real standings in career mode, placeholder in debug mode
+- [x] Settings: theme selection (darkfootball, football, + system themes)
+- [x] Keyboard navigation: Escape key back, status bar
 
-## Milestone 2: Game Systems (COMPLETE)
+### Core Engine (All E2E via Career Dashboard)
+- [x] Season calendar: day-by-day progression (Aug-May), match days on Saturdays
+- [x] League system: round-robin fixture generation, standings with points/GD/GF
+- [x] World simulation: AI clubs play their matches automatically
+- [x] AI managers: make transfers, set formations, rotate squads, choose training focus
 
-Backend systems for a complete management simulation.
+---
 
-- [x] League & Season: round-robin fixtures, season progression, standings
-- [x] World simulation: auto-simulate other league matches
-- [x] Transfer market: offers, negotiation, squad movement, market value calculation
-- [x] Loan system: deals, squad movement, expiration, recall
-- [x] Training: attribute-specific sessions with age/potential factors
-- [x] Youth academy: prospect generation, development, promotion, scout reports
-- [x] Injury manager: severity levels, recovery times, history
-- [x] Career & Manager: trophies, reputation, job history, manager attributes
-- [x] Finances: revenue streams, season budgets, sponsorship deals
-- [x] Save/Load: game state persistence with JSON
-- [x] Performance: caching, monitoring, batch generation
-- [x] Interactions: press conferences, player talks, team talks
-- [x] Roster management: auto-select, swap, captain, validation
-- [x] Mod support: discover, load, validate, apply mods
-- [x] Expanded database: 10 leagues across 4 confederations
-- [x] Edit page: edit players (names, attributes), teams (finances, formation)
+## Backend Complete, Partially Wired
 
-## Milestone 3: Career Mode (COMPLETE)
+These systems are fully implemented and tested but only accessible through the career engine's `advance_day()` loop — not through dedicated UI pages:
 
-The first playable game mode — manage a club through a full season.
+- [x] **Transfer Market engine** (Backend): offers, negotiation, counter-offers, squad movement, market value — *UI shows browse only, no buy/sell flow yet*
+- [x] **Loan system** (Backend): loan deals, squad movement, expiration — *no dedicated UI*
+- [x] **Youth Academy** (Backend): prospect generation, development, promotion — *no dedicated UI page*
+- [x] **Injury Manager** (Backend): severity levels, recovery tracking — *injuries happen in career loop but no injury list UI*
+- [x] **Press Conferences** (Backend): questions, responses, morale effects — *no dedicated UI trigger*
+- [x] **Player/Team Talks** (Backend): praise, criticize, encourage — *no dedicated UI trigger*
+- [x] **Training sessions** (Backend + E2E in debug): core TrainingManager used by both career AI and debug page
 
-### 3.1 New Game Flow
-- [x] "New Game" flow: enter manager name, select league, select club (CareerEngine.new_career)
-- [x] Pre-season setup: initial budget allocation (stadium_capacity * 500), squad review
-- [x] Calendar system: advance day-by-day through the season (SeasonCalendar)
-- [x] Dashboard data: upcoming fixtures, recent results, league position, finances summary (DashboardData)
+---
 
-### 3.2 Season Loop
-- [x] Weekly schedule: training days (Mon-Fri), match days (Sat) via SeasonCalendar
-- [x] Pre-match: team selection, formation, tactics, team talk (InteractionManager)
-- [x] Match day: play or simulate with live commentary (CareerEngine.play_match/simulate_match)
-- [x] Post-match: results, player ratings, press conference (InteractionManager)
-- [x] Between matches: training, transfers (during windows), youth academy
-- [x] End of season: final standings, awards, contract renewals (CareerEngine.end_season)
+## Backend Complete, Not Yet Wired to UI
 
-### 3.3 Multi-Season Progression
-- [x] Season transition: player aging, contract expirations, free agents
-- [x] Player development: young players grow, veterans decline (TrainingManager age factor)
-- [x] Manager reputation affects career (CareerManager.reputation)
-- [x] Trophy cabinet and career statistics across seasons (CareerManager)
+These systems are fully implemented with tests but have **no UI access point**:
 
-### 3.4 AI Opponents
-- [x] AI manager: makes transfers, sets formations, rotates squad (AIManager)
-- [x] AI transfer logic: offers, accepts/rejects based on player value and club needs
-- [x] AI training priorities based on squad weaknesses
+### Competitions (ofm/core/football/competitions.py)
+- [ ] Cup competitions: knockout brackets, seeded draws, extra time/penalties
+- [ ] Promotion/relegation: division system with playoff brackets
+- [ ] Continental competitions: Champions League style group + knockout
+- [ ] International football: World Cup with national squad selection
 
-## Milestone 4: Competitions (COMPLETE)
+### Advanced Simulation (ofm/core/simulation/advanced.py)
+- [ ] Weather effects: rain/snow/wind/heat modifiers on gameplay
+- [ ] Crowd system: attendance calculation, home advantage, crowd mood
+- [ ] Player morale: affects performance based on playing time, results, talks
+- [ ] Player relationships: chemistry bonuses between teammates
+- [ ] Agent demands: transfer requests, wage increases
+- [ ] FFP checker: financial fair play compliance
+- [ ] Stadium upgrades: expansion catalog with costs and duration
 
-Expanded competition formats beyond a single league.
+### Visualization (ofm/core/simulation/match_visuals.py)
+- [ ] Animated match frames: ball/player movement data for 2D/3D rendering
+- [ ] Heat maps: 10x10 position intensity grids
+- [ ] Pass maps: aggregated passing patterns
+- [ ] Highlight replay: extracted key moments with zoom frames
 
-### 4.1 Cup Competitions
-- [x] Knockout tournament format (single/double leg) — CupCompetition
-- [x] Draw system: seeding, pots, regional grouping
-- [x] Cup-specific rules: extra time, penalties, away goals
-- [x] Domestic cup (FA Cup style with rounds)
+### UI Systems (ofm/core/ui_systems.py)
+- [ ] Dashboard widgets: comprehensive data aggregation (partially used by career dashboard)
+- [ ] News feed generator: template-based news (partially used by career engine)
+- [ ] Player comparison tool: side-by-side attribute analysis
+- [ ] Form guide: W/D/L tracking with trend analysis
+- [ ] Notification system: prioritized notifications with read state
 
-### 4.2 Promotion & Relegation
-- [x] Multiple divisions per country (Div 1, Div 2) — DivisionSystem
-- [x] Promotion (top 2-3) and relegation (bottom 2-3) at season end
-- [x] Playoff system for borderline positions — PlayoffBracket
-- [x] Financial implications: promoted clubs get more TV revenue
+### Community (ofm/core/community.py)
+- [ ] Hot-seat multiplayer: turn-based local multiplayer
+- [ ] Network multiplayer: lobby/game framework (stub)
+- [ ] League commissioner: custom league rules
+- [ ] Challenge modes: 6 predefined challenges (Rags to Riches, Invincibles, etc.)
+- [ ] Historical scenarios: 3 scenarios (Istanbul 2005, Leicester 2016, Ajax Youth)
 
-### 4.3 International Club Competitions
-- [x] Champions League style: group stage + knockout rounds — ContinentalCompetition
-- [x] Europa League style: second-tier continental competition
-- [x] Qualification rounds based on league position
-- [x] Prize money and reputation rewards
+### Modding (ofm/core/modding_extended.py)
+- [ ] Database import/export: CSV and JSON with validation
+- [ ] Custom formation creator with persistence
+- [ ] Tactical preset sharing (export/import)
+- [ ] Custom theme system: discover, load, save themes
+- [ ] Plugin API: hook-based plugin system
 
-### 4.4 International Football
-- [x] National team squads (selected from league players) — InternationalCompetition
-- [x] International friendlies and qualifiers
-- [x] World Cup / Continental championship tournaments
-- [x] Player availability conflicts (club vs country)
+### Infrastructure
+- [ ] i18n: 3 languages defined (EN, PT-BR, ES) but UI strings still hardcoded
+- [ ] Benchmarking suite: performance measurement tools built but not integrated
+- [ ] Save migration: version chain defined but not triggered on load
 
-## Milestone 5: Advanced Simulation (COMPLETE)
+---
 
-Deeper, more realistic match and world simulation.
+## Not Yet Built
 
-### 5.1 Enhanced Match Engine
-- [x] Player fatigue curves within matches (non-linear stamina half-life formula)
-- [x] Weather effects on gameplay (WeatherSystem with modifiers per weather type)
-- [x] Crowd effects (CrowdSystem: home advantage, attendance, crowd mood)
-- [x] Tactical adjustments mid-match (manager reacts to score via AIManager)
-- [x] Set piece routines (designed plays for corners, free kicks via team_strategy)
+These items have no implementation at all:
 
-### 5.2 Player Depth
-- [x] Player morale and happiness (PlayerMorale: affected by playing time, results, talks)
-- [x] Player relationships (PlayerRelationships: chemistry bonuses, rivalries)
-- [x] Agent interactions (PlayerCareerEvents: contract demands, transfer requests)
-- [x] Retirement and testimonial matches (PlayerCareerEvents)
-- [x] Player awards (PlayerCareerEvents: league MVP, Golden Boot, Best Young Player)
+- [ ] Dedicated Youth Academy UI page
+- [ ] Dedicated Press Conference UI page
+- [ ] Transfer negotiation UI (bid/counter-offer flow)
+- [ ] Loan management UI
+- [ ] Injury list/medical center UI
+- [ ] Dedicated Player Comparison UI page
+- [ ] Match replay viewer (using MatchAnimator frame data)
+- [ ] 3D match visualization renderer
+- [ ] Drag-and-drop formation editor (current is combobox-based)
+- [ ] Screen reader accessibility
+- [ ] Package distribution (PyPI, installer)
+- [ ] Sphinx documentation build
 
-### 5.3 Financial Depth
-- [x] Fair Financial Play (FFP) enforcement — FFPChecker
-- [x] Stadium expansion and renovation — StadiumManager with upgrade catalog
-- [x] Merchandise sales linked to success (FinanceManager.calculate_tv_revenue)
-- [x] Broadcast revenue distribution (position-based TV revenue)
-- [x] Debt management and bankruptcy risk (FinanceManager expense tracking)
+---
 
-## Milestone 6: Visualization & UI Polish (COMPLETE)
+## Test Coverage
 
-Improved presentation and user experience.
+| Area | Tests | Status |
+|------|-------|--------|
+| Match simulation (events, shots, passes, etc.) | 96 | Passing |
+| Stats Explorer logic | 33 | Passing |
+| Core systems (DB, settings, players, teams) | 27 | Passing |
+| New systems (competitions, career, morale, etc.) | 92 | Passing |
+| Substitutions | 11 | Passing |
+| Formations | 11 | Passing |
+| **Total** | **304** | **All passing** |
 
-### 6.1 Match Visualization
-- [x] 2D animated match view data (MatchAnimator: ball and player movement frames)
-- [x] 3D match visualization data pipeline (MatchFrame normalized coordinates for rendering)
-- [x] Highlight replay system (HighlightGenerator: extract highlights, generate replay frames)
-- [x] Match heat maps and pass maps (HeatMapGenerator: 10x10 grids, pass aggregation)
+---
 
-### 6.2 UI/UX Improvements
-- [x] Dashboard with widgets (DashboardData: calendar, news feed, standings)
-- [x] Drag-and-drop formation editor (RosterManager: swap, assign, validate)
-- [x] Player comparison tool (PlayerComparison: side-by-side attributes)
-- [x] Interactive league table with form guides (FormGuide: W/D/L tracking, trends)
-- [x] News feed (NewsFeedGenerator: transfers, injuries, results, milestones, youth, contracts)
-- [x] Notification system (NotificationSystem: priorities, read tracking, age cleanup)
+## Architecture Summary
 
-### 6.3 Accessibility
-- [x] Scalable UI for different screen sizes (ScalableUI: responsive geometry, font scaling)
-- [x] Color-blind friendly themes (protanopia, deuteranopia, tritanopia palettes)
-- [x] Keyboard-only navigation (KeyboardNavigation: 18 shortcuts with help text)
-- [x] Screen reader support for key information (structured text-based data output)
+```
+User clicks "New Game" → NewGamePage → NewGameController
+  → CareerEngine.new_career() → creates League, Season, Calendar, AI managers
+  → switches to CareerDashboardPage
 
-## Milestone 7: Community & Extensibility (COMPLETE)
+CareerDashboardController:
+  "Advance Day" → CareerEngine.advance_day()
+    → processes calendar events (training, matches, transfers, injuries)
+    → AI managers make decisions
+    → refreshes dashboard widgets
 
-Features for community engagement and modding.
+  "Play Match" → CareerEngine.play_match()
+    → creates LiveGame with TeamSimulation
+    → runs SimulationEngine with events
+    → records result in League standings
 
-### 7.1 Modding Framework
-- [x] Custom database import/export (CSV, JSON) — DatabaseImportExport
-- [x] Custom formation creator — FormationCreator
-- [x] Tactical preset sharing — TacticalPresetManager (export/import JSON)
-- [x] Skin/theme system — ThemeManager (discover, load, save custom themes)
-- [x] Plugin API for custom logic — PluginAPI (hook-based event system)
+  "Save Game" → SaveManager.save_game()
+    → serializes GameState to JSON
 
-### 7.2 Multiplayer
-- [x] Hot-seat multiplayer (same machine, take turns) — HotSeatMultiplayer
-- [x] Network multiplayer (LAN/online) — NetworkMultiplayer (framework)
-- [x] League commissioner mode (manage a shared league) — LeagueCommissioner
-
-### 7.3 Community Features
-- [x] Steam Workshop integration framework (ModLoader + ThemeManager)
-- [x] Leaderboards (challenge tracking via ChallengeMode.check_win_condition)
-- [x] Challenge modes — ChallengeMode (6 challenges: Rags to Riches, Youth Revolution, etc.)
-- [x] Historical scenarios — HistoricalScenario (Miracle of Istanbul, Leicester 2016, Ajax Youth)
-
-## Technical Debt & Maintenance (COMPLETE)
-
-- [x] Increase test coverage to 90%+ for core modules (304 tests covering all systems)
-- [x] Property-based testing with Hypothesis for generators
-- [x] Benchmarking suite for simulation performance — BenchmarkSuite
-- [x] Database migration system for save file compatibility — SaveMigration
-- [x] Localization framework (i18n) for multiple languages — LocaleManager (EN, PT-BR, ES)
-- [x] Package distribution helpers — PackageManager (dependency check, system info, install instructions)
-- [x] Developer documentation with Sphinx (existing docs/ directory)
-- [x] API documentation for modders (PluginAPI, ModLoader, DatabaseImportExport documented)
+User clicks "Load Game" → LoadGamePage → LoadGameController
+  → SaveManager.load_game() → restores GameState
+  → switches to CareerDashboardPage
+```
 
 ---
 
 ## Version History
 
-| Version | Milestone | Status |
-|---------|-----------|--------|
-| 0.1.0 | Foundation | Complete |
-| 0.2.0 | Game Systems | Complete |
-| 0.3.0 | Career Mode | Complete |
-| 0.4.0 | Competitions | Complete |
-| 0.5.0 | Advanced Simulation | Complete |
-| 0.6.0 | Visualization & UI | Complete |
-| 0.7.0 | Community & Extensibility | Complete |
-| 1.0.0 | First Stable Release | Next |
+| Version | What was delivered |
+|---------|-------------------|
+| 0.1.0 | Foundation: match engine, player system, debug UI |
+| 0.2.0 | Game systems: training, transfers, youth, finances, save/load |
+| 0.3.0 | Career mode: new game flow, dashboard, season loop, AI opponents |
+| 0.4.0-0.7.0 | Backend systems: competitions, advanced sim, visualization, community, modding, i18n |
+| **Current** | **v0.7.0 — Career mode playable, rich backend, UI integration ongoing** |
+| 1.0.0 | Target: all backend systems wired to UI, full game loop polished |

@@ -102,6 +102,9 @@ class GUI:
             "championship": self._add_frame(ChampionshipPage),
             "stats_explorer": self._add_frame(StatsExplorerPage),
             "edit": self._add_frame(EditPage),
+            "new_game": self._add_frame(NewGamePage),
+            "load_game": self._add_frame(LoadGamePage),
+            "career_dashboard": self._add_frame(CareerDashboardPage),
         }
 
         # Reverse lookup: frame -> page name

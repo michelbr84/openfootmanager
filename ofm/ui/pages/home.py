@@ -42,7 +42,7 @@ class HomePage(ttk.Frame):
         self.settings_btn.grid(row=4, column=0, padx=120, pady=15, sticky=NSEW)
 
         self.version_label = ttk.Label(
-            self, text="v0.2.0 - Debug Mode", font=("TkDefaultFont", 9),
+            self, text="v0.7.0", font=("TkDefaultFont", 9),
             anchor=CENTER, foreground="gray"
         )
         self.version_label.grid(row=5, column=0, padx=20, pady=(30, 10), sticky=EW)
