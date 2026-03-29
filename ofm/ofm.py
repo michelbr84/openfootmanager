@@ -28,3 +28,8 @@ class OFM:
 
     def run(self):
         self.controller.run()
+
+
+def main():
+    app = OFM()
+    app.run()

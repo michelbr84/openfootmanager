@@ -130,6 +130,7 @@ class CareerDashboardPage(ttk.Frame):
         right_col.columnconfigure(0, weight=1)
         right_col.rowconfigure(0, weight=1)
         right_col.rowconfigure(1, weight=0)
+        right_col.rowconfigure(2, weight=0)
 
         # -- News Feed --
         news_frame = ttk.LabelFrame(right_col, text="News Feed")
@@ -174,10 +175,52 @@ class CareerDashboardPage(ttk.Frame):
         self.formation_btn = ttk.Button(actions_frame, text="Formation")
         self.formation_btn.grid(row=2, column=1, padx=5, pady=5, sticky=EW)
 
+        self.competitions_btn = ttk.Button(actions_frame, text="Competitions")
+        self.competitions_btn.grid(row=3, column=0, padx=5, pady=5, sticky=EW)
+
+        self.press_conference_btn = ttk.Button(actions_frame, text="Press Conference")
+        self.press_conference_btn.grid(row=3, column=0, padx=5, pady=5, sticky=EW)
+
+        self.injury_list_btn = ttk.Button(actions_frame, text="Medical Center")
+        self.injury_list_btn.grid(row=3, column=1, padx=5, pady=5, sticky=EW)
+
+        self.player_comparison_btn = ttk.Button(actions_frame, text="Player Comparison")
+        self.player_comparison_btn.grid(row=4, column=0, padx=5, pady=5, sticky=EW)
+
+        self.loans_btn = ttk.Button(actions_frame, text="Loans")
+        self.loans_btn.grid(row=4, column=1, padx=5, pady=5, sticky=EW)
+
+        self.community_btn = ttk.Button(actions_frame, text="Community Hub")
+        self.community_btn.grid(row=5, column=0, padx=5, pady=5, sticky=EW)
+
+        self.match_replay_btn = ttk.Button(actions_frame, text="Match Replay")
+        self.match_replay_btn.grid(row=5, column=1, padx=5, pady=5, sticky=EW)
+
         self.save_btn = ttk.Button(
             actions_frame, text="Save Game", bootstyle="info"
         )
-        self.save_btn.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky=EW)
+        self.save_btn.grid(row=6, column=0, columnspan=2, padx=5, pady=5, sticky=EW)
+
+        # -- Notifications --
+        notif_frame = ttk.LabelFrame(right_col, text="Notifications")
+        notif_frame.grid(row=2, column=0, sticky=NSEW, pady=(5, 0))
+        notif_frame.columnconfigure(0, weight=1)
+        notif_frame.rowconfigure(0, weight=1)
+
+        self.notifications_list = ttk.Treeview(
+            notif_frame,
+            columns=("Message",),
+            show="headings",
+            height=4,
+        )
+        self.notifications_list.heading("Message", text="Message")
+        self.notifications_list.column("Message", width=300, minwidth=100)
+        self.notifications_list.grid(row=0, column=0, sticky=NSEW, padx=5, pady=(5, 0))
+
+        self.clear_notif_btn = ttk.Button(
+            notif_frame, text="Clear Read", bootstyle="secondary"
+        )
+        self.clear_notif_btn.grid(row=1, column=0, padx=5, pady=5, sticky=EW)
 
         # ==================================================================
         # Bottom (row 2, columnspan 2)

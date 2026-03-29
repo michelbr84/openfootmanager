@@ -1,0 +1,4 @@
+include LICENSE.md
+include README.md
+include ROADMAP.md
+recursive-include ofm/res *

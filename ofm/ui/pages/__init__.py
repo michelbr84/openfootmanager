@@ -33,3 +33,10 @@ from .new_game import NewGamePage
 from .load_game import LoadGamePage
 from .career_dashboard import CareerDashboardPage
 from .youth_academy import YouthAcademyPage
+from .competitions import CompetitionsPage
+from .loan_management import LoanManagementPage
+from .community_hub import CommunityHubPage
+from .press_conference import PressConferencePage
+from .injury_list import InjuryListPage
+from .player_comparison import PlayerComparisonPage
+from .match_replay import MatchReplayPage

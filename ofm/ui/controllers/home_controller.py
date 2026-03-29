@@ -42,8 +42,12 @@ class HomePageController(ControllerInterface):
     def go_to_load_game(self):
         self.switch("load_game")
 
+    def go_to_community_hub(self):
+        self.switch("community_hub")
+
     def _bind(self):
         self.page.debug_mode_btn.config(command=self.go_to_debug_page)
         self.page.settings_btn.config(command=self.go_to_settings_page)
         self.page.new_game_btn.config(command=self.go_to_new_game)
         self.page.load_game_btn.config(command=self.go_to_load_game)
+        self.page.community_hub_btn.config(command=self.go_to_community_hub)

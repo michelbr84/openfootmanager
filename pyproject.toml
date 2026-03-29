@@ -1,10 +1,26 @@
 [tool.poetry]
 name = "openfootmanager"
-version = "0.1.0"
+version = "0.7.0"
 description = "A free and open source football manager game."
 authors = ["sturdy-robot <pedrenriquegg@hotmail.com>"]
+license = "GPL-3.0"
 readme = "README.md"
+repository = "https://github.com/sturdy-robot/openfootmanager"
+keywords = ["football", "soccer", "manager", "game", "simulation"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Games/Entertainment :: Simulation",
+    "Operating System :: OS Independent",
+]
 package-mode = false
+
+[tool.poetry.scripts]
+openfootmanager = "ofm.ofm:main"
 
 [tool.poetry.dependencies]
 python = "^3.10"

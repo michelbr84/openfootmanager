@@ -37,6 +37,13 @@ from .new_game_controller import NewGameController
 from .load_game_controller import LoadGameController
 from .career_dashboard_controller import CareerDashboardController
 from .youth_academy_controller import YouthAcademyController
+from .competitions_controller import CompetitionsController
+from .loan_management_controller import LoanManagementController
+from .community_hub_controller import CommunityHubController
+from .press_conference_controller import PressConferenceController
+from .injury_list_controller import InjuryListController
+from .player_comparison_controller import PlayerComparisonController
+from .match_replay_controller import MatchReplayController
 
 
 class OFMController(ControllerInterface):
@@ -91,6 +98,27 @@ class OFMController(ControllerInterface):
             ),
             "youth_academy": YouthAcademyController(
                 self, self.gui.pages["youth_academy"]
+            ),
+            "competitions": CompetitionsController(
+                self, self.gui.pages["competitions"]
+            ),
+            "loan_management": LoanManagementController(
+                self, self.gui.pages["loan_management"]
+            ),
+            "community_hub": CommunityHubController(
+                self, self.gui.pages["community_hub"]
+            ),
+            "press_conference": PressConferenceController(
+                self, self.gui.pages["press_conference"]
+            ),
+            "injury_list": InjuryListController(
+                self, self.gui.pages["injury_list"]
+            ),
+            "player_comparison": PlayerComparisonController(
+                self, self.gui.pages["player_comparison"]
+            ),
+            "match_replay": MatchReplayController(
+                self, self.gui.pages["match_replay"]
             ),
         }
 

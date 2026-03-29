@@ -66,5 +66,26 @@ class DebugHomePage(ttk.Frame):
         self.youth_academy_btn = ttk.Button(self, text="Youth Academy")
         self.youth_academy_btn.grid(row=14, column=0, padx=10, pady=10, sticky=EW)
 
+        self.competitions_btn = ttk.Button(self, text="Competitions")
+        self.competitions_btn.grid(row=15, column=0, padx=10, pady=10, sticky=EW)
+
+        self.loan_management_btn = ttk.Button(self, text="Loan Management")
+        self.loan_management_btn.grid(row=16, column=0, padx=10, pady=10, sticky=EW)
+
+        self.community_hub_btn = ttk.Button(self, text="Community Hub")
+        self.community_hub_btn.grid(row=17, column=0, padx=10, pady=10, sticky=EW)
+
+        self.press_conference_btn = ttk.Button(self, text="Press Conference")
+        self.press_conference_btn.grid(row=18, column=0, padx=10, pady=10, sticky=EW)
+
+        self.injury_list_btn = ttk.Button(self, text="Medical Center")
+        self.injury_list_btn.grid(row=19, column=0, padx=10, pady=10, sticky=EW)
+
+        self.player_comparison_btn = ttk.Button(self, text="Player Comparison")
+        self.player_comparison_btn.grid(row=20, column=0, padx=10, pady=10, sticky=EW)
+
+        self.match_replay_btn = ttk.Button(self, text="Match Replay")
+        self.match_replay_btn.grid(row=21, column=0, padx=10, pady=10, sticky=EW)
+
         self.cancel_btn = ttk.Button(self, text="Cancel")
-        self.cancel_btn.grid(row=15, column=0, padx=10, pady=10, sticky=EW)
+        self.cancel_btn.grid(row=22, column=0, padx=10, pady=10, sticky=EW)

@@ -38,11 +38,14 @@ class HomePage(ttk.Frame):
         self.load_game_btn = ttk.Button(self, text="Load Game")
         self.load_game_btn.grid(row=3, column=0, padx=120, pady=15, sticky=NSEW)
 
+        self.community_hub_btn = ttk.Button(self, text="Community Hub")
+        self.community_hub_btn.grid(row=4, column=0, padx=120, pady=15, sticky=NSEW)
+
         self.settings_btn = ttk.Button(self, text="Settings")
-        self.settings_btn.grid(row=4, column=0, padx=120, pady=15, sticky=NSEW)
+        self.settings_btn.grid(row=5, column=0, padx=120, pady=15, sticky=NSEW)
 
         self.version_label = ttk.Label(
             self, text="v0.7.0", font=("TkDefaultFont", 9),
             anchor=CENTER, foreground="gray"
         )
-        self.version_label.grid(row=5, column=0, padx=20, pady=(30, 10), sticky=EW)
+        self.version_label.grid(row=6, column=0, padx=20, pady=(30, 10), sticky=EW)

@@ -106,6 +106,13 @@ class GUI:
             "load_game": self._add_frame(LoadGamePage),
             "career_dashboard": self._add_frame(CareerDashboardPage),
             "youth_academy": self._add_frame(YouthAcademyPage),
+            "competitions": self._add_frame(CompetitionsPage),
+            "loan_management": self._add_frame(LoanManagementPage),
+            "community_hub": self._add_frame(CommunityHubPage),
+            "press_conference": self._add_frame(PressConferencePage),
+            "injury_list": self._add_frame(InjuryListPage),
+            "player_comparison": self._add_frame(PlayerComparisonPage),
+            "match_replay": self._add_frame(MatchReplayPage),
         }
 
         # Reverse lookup: frame -> page name

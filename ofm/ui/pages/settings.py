@@ -32,6 +32,14 @@ class SettingsPage(ttk.Frame):
         self.theme_combo_box.current(self.theme_names.index(self.style.theme.name))
         self.cancel_btn = ttk.Button(self, text="Cancel")
 
+        self.language_label = ttk.Label(self, text="Language: ")
+        self.language_combo = ttk.Combobox(self, state="readonly")
+
+        self.benchmark_btn = ttk.Button(self, text="Run Benchmark")
+
         self.theme_label.grid(row=1, column=0, padx=10, pady=10, sticky=EW)
         self.theme_combo_box.grid(row=1, column=1, padx=10, pady=10, sticky=EW)
+        self.language_label.grid(row=2, column=0, padx=10, pady=10, sticky=EW)
+        self.language_combo.grid(row=2, column=1, padx=10, pady=10, sticky=EW)
+        self.benchmark_btn.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky=EW)
         self.cancel_btn.grid(row=8, column=0, padx=10, pady=10, sticky=EW)

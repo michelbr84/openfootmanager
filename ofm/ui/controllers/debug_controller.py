@@ -74,6 +74,27 @@ class DebugPageController(ControllerInterface):
     def go_to_youth_academy_page(self):
         self.switch("youth_academy")
 
+    def go_to_competitions_page(self):
+        self.switch("competitions")
+
+    def go_to_loan_management_page(self):
+        self.switch("loan_management")
+
+    def go_to_community_hub_page(self):
+        self.switch("community_hub")
+
+    def go_to_press_conference_page(self):
+        self.switch("press_conference")
+
+    def go_to_injury_list_page(self):
+        self.switch("injury_list")
+
+    def go_to_player_comparison_page(self):
+        self.switch("player_comparison")
+
+    def go_to_match_replay_page(self):
+        self.switch("match_replay")
+
     def _bind(self):
         self.page.match_sim_btn.config(command=self.go_to_match_sim_page)
         self.page.cancel_btn.config(command=self.go_to_home_page)
@@ -92,3 +113,10 @@ class DebugPageController(ControllerInterface):
         self.page.team_explorer_btn.config(command=self.go_to_team_explorer_page)
         self.page.edit_btn.config(command=self.go_to_edit_page)
         self.page.youth_academy_btn.config(command=self.go_to_youth_academy_page)
+        self.page.competitions_btn.config(command=self.go_to_competitions_page)
+        self.page.loan_management_btn.config(command=self.go_to_loan_management_page)
+        self.page.community_hub_btn.config(command=self.go_to_community_hub_page)
+        self.page.press_conference_btn.config(command=self.go_to_press_conference_page)
+        self.page.injury_list_btn.config(command=self.go_to_injury_list_page)
+        self.page.player_comparison_btn.config(command=self.go_to_player_comparison_page)
+        self.page.match_replay_btn.config(command=self.go_to_match_replay_page)

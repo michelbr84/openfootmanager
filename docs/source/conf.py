@@ -1,20 +1,15 @@
 # Configuration file for the Sphinx documentation builder.
 #
-# This file only contains a selection of the most football options. For a full
+# This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
-import sphinx
 
 # -- Path setup --------------------------------------------------------------
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
 
+sys.path.insert(0, os.path.abspath(os.path.join("..", "..")))
 
 # -- Project information -----------------------------------------------------
 
@@ -23,7 +18,7 @@ copyright = "2023, Pedrenrique G. Guimaraes"
 author = "Pedrenrique G. Guimaraes"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.0-alpha"
+release = "0.7.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -32,7 +27,9 @@ release = "0.1.0-alpha"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    sphinx.ext.viewcode,
+    "sphinx.ext.autodoc",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.napoleon",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

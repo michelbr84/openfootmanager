@@ -17,6 +17,7 @@ import tkinter.messagebox as messagebox
 
 from ...core.career_mode import CareerEngine
 from ...core.game_state import SaveManager
+from ...core.migration import SaveMigration
 from ..pages.load_game import LoadGamePage
 from .controllerinterface import ControllerInterface
 
@@ -71,6 +72,19 @@ class LoadGameController(ControllerInterface):
             self.page.update_idletasks()
 
             game_state = self.save_manager.load_game(save_name)
+
+            # Migrate save data if needed
+            migration = SaveMigration()
+            save_dict = game_state.__dict__ if hasattr(game_state, '__dict__') else {}
+            if isinstance(save_dict, dict) and migration.needs_migration(save_dict):
+                migrated = migration.migrate(save_dict)
+                for key, value in migrated.items():
+                    if hasattr(game_state, key):
+                        setattr(game_state, key, value)
+                self.page.status_label.config(
+                    text=f"Save migrated from older version to {SaveMigration.CURRENT_VERSION}."
+                )
+                self.page.update_idletasks()
 
             # Create a CareerEngine and attach the loaded state
             career_engine = CareerEngine(self.controller.settings, self.controller.db)

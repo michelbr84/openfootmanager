@@ -1,8 +1,10 @@
 import datetime
-from tkinter import messagebox
+from tkinter import messagebox, simpledialog
+from uuid import UUID
 
 from ..pages.market import MarketPage
 from .controllerinterface import ControllerInterface
+from ...core.football.transfer_market import TransferMarket, TransferListing, OfferStatus
 
 
 class MarketController(ControllerInterface):
@@ -12,6 +14,7 @@ class MarketController(ControllerInterface):
         self.controller = controller
         self.page = page
         self._market_data = []
+        self._selected_player = None
         self._bind()
 
     def initialize(self):
@@ -48,10 +51,19 @@ class MarketController(ControllerInterface):
         self._market_data.sort(key=lambda p: p["value"], reverse=True)
         self._populate_tree(self._market_data)
 
+        # Reset offer frame
+        self._selected_player = None
+        self.page.selected_player_label.config(text="Selected: None")
+        self.page.offer_entry.delete(0, "end")
+        self.page.offer_result_label.config(text="")
+
     def _bind(self):
         self.page.back_btn.config(command=self.go_to_debug_home_page)
         self.page.search_btn.config(command=self._search)
         self.page.buy_btn.config(command=self._buy_player)
+        self.page.sell_btn.config(command=self._sell_player)
+        self.page.submit_offer_btn.config(command=self._submit_offer)
+        self.page.tree.bind("<<TreeviewSelect>>", self._on_tree_select)
 
     def _search(self):
         query = self.page.search_entry.get().strip().lower()
@@ -77,6 +89,131 @@ class MarketController(ControllerInterface):
                 p["club"],
             ))
 
+    def _on_tree_select(self, event=None):
+        """When a player is selected in the tree, show their name and suggest a price."""
+        selected = self.page.tree.selection()
+        if not selected:
+            return
+
+        values = self.page.tree.item(selected[0], "values")
+        name, age, pos, overall, value_str, club = values
+
+        self._selected_player = {
+            "name": name,
+            "age": age,
+            "position": pos,
+            "overall": overall,
+            "value_str": value_str,
+            "club": club,
+        }
+
+        self.page.selected_player_label.config(text=f"Selected: {name} ({club})")
+
+        # Suggest the displayed value as starting offer
+        self.page.offer_entry.delete(0, "end")
+        # Strip $ and commas to get numeric value
+        clean_value = value_str.replace("$", "").replace(",", "").strip()
+        self.page.offer_entry.insert(0, clean_value)
+        self.page.offer_result_label.config(text="")
+
+    def _submit_offer(self):
+        """Submit a transfer offer for the selected player."""
+        if self._selected_player is None:
+            messagebox.showinfo("Transfer Offer", "Please select a player first.")
+            return
+
+        offer_text = self.page.offer_entry.get().strip()
+        try:
+            offer_amount = float(offer_text)
+        except (ValueError, TypeError):
+            messagebox.showerror("Transfer Offer", "Please enter a valid numeric offer amount.")
+            return
+
+        if offer_amount <= 0:
+            messagebox.showerror("Transfer Offer", "Offer amount must be positive.")
+            return
+
+        name = self._selected_player["name"]
+
+        # Try to use career engine's transfer market if available
+        career = getattr(self.controller, "career_engine", None)
+        if career is not None and hasattr(career, "transfer_market"):
+            try:
+                # Find the player in market data by name
+                player_data = None
+                for p in self._market_data:
+                    if p["name"] == name:
+                        player_data = p
+                        break
+
+                if player_data is None:
+                    self.page.offer_result_label.config(text="Player not found in market data.")
+                    return
+
+                player_id = player_data["id"]
+                if isinstance(player_id, int):
+                    player_id = UUID(int=player_id)
+
+                # Ensure the player is listed
+                tm = career.transfer_market
+                listing = None
+                for l in tm.listings:
+                    if l.player_id == player_id:
+                        listing = l
+                        break
+
+                if listing is None:
+                    # Auto-list the player with current value as asking price
+                    asking = player_data["value"]
+                    tm.list_player(player_id, None, asking)
+
+                buying_club_id = getattr(career, "player_club_id", None)
+                if buying_club_id is None:
+                    self.page.offer_result_label.config(text="No user club set.")
+                    return
+
+                offer = tm.make_offer(player_id, buying_club_id, offer_amount)
+
+                if offer.status == OfferStatus.ACCEPTED:
+                    self.page.offer_result_label.config(
+                        text=f"Offer accepted! {name} joins your squad."
+                    )
+                elif offer.status == OfferStatus.REJECTED:
+                    self.page.offer_result_label.config(
+                        text=f"Offer rejected. Try a higher amount."
+                    )
+                elif offer.status == OfferStatus.NEGOTIATING:
+                    counter = offer.counter_amount or 0
+                    self.page.offer_result_label.config(
+                        text=f"Counter-offer: ${counter:,.0f}"
+                    )
+                else:
+                    self.page.offer_result_label.config(
+                        text=f"Offer status: {offer.status.value}"
+                    )
+                return
+            except Exception as e:
+                self.page.offer_result_label.config(text=f"Error: {e}")
+                return
+
+        # Fallback: simple simulation without career engine
+        value_str = self._selected_player["value_str"]
+        clean_value = float(value_str.replace("$", "").replace(",", "").strip())
+
+        if offer_amount >= clean_value:
+            self.page.offer_result_label.config(
+                text=f"Offer accepted! {name} joins your squad."
+            )
+        elif offer_amount >= clean_value * 0.70:
+            counter = round((offer_amount + clean_value) / 2, 0)
+            self.page.offer_result_label.config(
+                text=f"Counter-offer: ${counter:,.0f}"
+            )
+        else:
+            self.page.offer_result_label.config(
+                text="Offer rejected. Too low."
+            )
+
     def _buy_player(self):
         selected = self.page.tree.selection()
         if not selected:
@@ -89,6 +226,25 @@ class MarketController(ControllerInterface):
             "Player Info",
             f"Name: {name}\nAge: {age}\nPosition: {pos}\n"
             f"Overall: {overall}\nValue: {value}\nClub: {club}",
+        )
+
+    def _sell_player(self):
+        """List one of the user's players on the market."""
+        career = getattr(self.controller, "career_engine", None)
+        if career is not None and hasattr(career, "transfer_market"):
+            messagebox.showinfo(
+                "Sell Player",
+                "Select a player from your squad in the Team Formation page "
+                "and list them on the transfer market from there.\n\n"
+                "This feature will open the squad view in a future update.",
+            )
+            return
+
+        # Debug mode fallback
+        messagebox.showinfo(
+            "Sell Player",
+            "Sell Player is available in Career Mode.\n"
+            "Start a new game to access full transfer features.",
         )
 
     @staticmethod

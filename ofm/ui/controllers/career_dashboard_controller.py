@@ -16,12 +16,14 @@
 from ..pages.career_dashboard import CareerDashboardPage
 from .controllerinterface import ControllerInterface
 from ...core.game_state import SaveManager
+from ...core.ui_systems import NotificationSystem, NotificationPriority
 
 
 class CareerDashboardController(ControllerInterface):
     def __init__(self, controller: ControllerInterface, page: CareerDashboardPage):
         self.controller = controller
         self.page = page
+        self._notifications = NotificationSystem()
         self._bind()
 
     def switch(self, page):
@@ -66,6 +68,9 @@ class CareerDashboardController(ControllerInterface):
 
         # -- Play match button state --
         self._update_play_match_state(career)
+
+        # -- Notifications --
+        self._refresh_notifications()
 
     # ------------------------------------------------------------------
     # Widget population helpers
@@ -140,18 +145,60 @@ class CareerDashboardController(ControllerInterface):
     # Actions
     # ------------------------------------------------------------------
 
+    def _refresh_notifications(self):
+        """Show unread notifications in the listbox."""
+        tree = self.page.notifications_list
+        for item in tree.get_children():
+            tree.delete(item)
+        unread = self._notifications.get_unread()
+        for notif in unread:
+            priority_tag = f"[{notif.priority.name}]"
+            tree.insert("", "end", values=(f"{priority_tag} {notif.title}: {notif.body}",))
+
+    def _clear_notifications(self):
+        """Mark all notifications as read and refresh."""
+        for i in range(len(self._notifications.notifications)):
+            self._notifications.mark_read(i)
+        self._refresh_notifications()
+
     def _advance_day(self):
         career = getattr(self.controller, "career_engine", None)
         if career is None:
             return
         summary = career.advance_day()
 
+        # Add notifications for important events
+        date_str = summary.get("date", "")
+        match_ready = summary.get("match_ready")
+        if match_ready:
+            self._notifications.add(
+                "Match Day",
+                f"You have a match scheduled on {date_str}!",
+                NotificationPriority.HIGH,
+            )
+
+        # Check for injuries in the summary
+        injuries = summary.get("injuries", [])
+        for injury in injuries:
+            self._notifications.add(
+                "Injury",
+                str(injury),
+                NotificationPriority.URGENT,
+            )
+
+        # Check for transfer deadlines
+        transfer_deadline = summary.get("transfer_deadline")
+        if transfer_deadline:
+            self._notifications.add(
+                "Transfer Deadline",
+                "The transfer window is closing soon!",
+                NotificationPriority.HIGH,
+            )
+
         # Refresh all widgets
         self.initialize()
 
         # Extra status info
-        date_str = summary.get("date", "")
-        match_ready = summary.get("match_ready")
         if match_ready:
             self.controller.gui.update_status(
                 f"Day advanced to {date_str} - Match day!"
@@ -259,6 +306,27 @@ class CareerDashboardController(ControllerInterface):
     def _go_to_youth(self):
         self.switch("youth_academy")
 
+    def _go_to_competitions(self):
+        self.switch("competitions")
+
+    def _go_to_press_conference(self):
+        self.switch("press_conference")
+
+    def _go_to_injury_list(self):
+        self.switch("injury_list")
+
+    def _go_to_player_comparison(self):
+        self.switch("player_comparison")
+
+    def _go_to_loans(self):
+        self.switch("loan_management")
+
+    def _go_to_community_hub(self):
+        self.switch("community_hub")
+
+    def _go_to_match_replay(self):
+        self.switch("match_replay")
+
     def _go_to_main_menu(self):
         self.switch("home")
 
@@ -273,5 +341,13 @@ class CareerDashboardController(ControllerInterface):
         self.page.transfers_btn.config(command=self._go_to_transfers)
         self.page.youth_btn.config(command=self._go_to_youth)
         self.page.formation_btn.config(command=self._go_to_formation)
+        self.page.competitions_btn.config(command=self._go_to_competitions)
+        self.page.loans_btn.config(command=self._go_to_loans)
+        self.page.community_btn.config(command=self._go_to_community_hub)
         self.page.save_btn.config(command=self._save_game)
+        self.page.clear_notif_btn.config(command=self._clear_notifications)
+        self.page.press_conference_btn.config(command=self._go_to_press_conference)
+        self.page.injury_list_btn.config(command=self._go_to_injury_list)
+        self.page.player_comparison_btn.config(command=self._go_to_player_comparison)
+        self.page.match_replay_btn.config(command=self._go_to_match_replay)
         self.page.back_btn.config(command=self._go_to_main_menu)

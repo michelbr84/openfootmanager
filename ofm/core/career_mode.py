@@ -40,6 +40,15 @@ from .football.club import Club
 from .football.player import PlayerTeam, Positions
 from .settings import Settings
 from .db.database import DB
+from .simulation.advanced import (
+    WeatherSystem,
+    CrowdSystem,
+    PlayerMorale,
+    PlayerRelationships,
+    PlayerCareerEvents,
+    FFPChecker,
+    StadiumManager,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -652,6 +661,15 @@ class CareerEngine:
         self.clubs: list[Club] = []
         self._club_map: dict[UUID, Club] = {}
 
+        # Advanced simulation systems
+        self.weather_system = WeatherSystem()
+        self.crowd_system = CrowdSystem()
+        self.player_morale = PlayerMorale()
+        self.player_relationships = PlayerRelationships()
+        self.career_events = PlayerCareerEvents()
+        self.ffp_checker = FFPChecker()
+        self.stadium_manager = StadiumManager(stadium_capacity=0)
+
         # News / event feed
         self.news_feed: list[dict] = []
 
@@ -791,6 +809,14 @@ class CareerEngine:
                 except ValueError:
                     pass
 
+        # --- advanced simulation init ---
+        self.stadium_manager.current_capacity = player_club.stadium_capacity
+        # Generate initial relationships for squad
+        if player_club.squad:
+            self.player_relationships.generate_initial_relationships(
+                list(player_club.squad)
+            )
+
         # --- welcome news ---
         self._add_news(
             f"Welcome to {player_club.name}!",
@@ -912,6 +938,16 @@ class CareerEngine:
         # --- random injury chance (very small per day) -----------------------
         self._random_daily_injury_check()
 
+        # --- stadium upgrade completion check --------------------------------
+        if getattr(self, 'stadium_manager', None) is not None:
+            completed = self.stadium_manager.check_completion(self.current_date)
+            for upgrade in completed:
+                self._add_news(
+                    f"Stadium upgrade complete: {upgrade['name']}",
+                    f"The {upgrade['name']} project is finished. "
+                    f"Capacity increased by {upgrade['capacity_increase']}.",
+                )
+
         return {
             "date": self.current_date.isoformat(),
             "events": day_events,
@@ -930,6 +966,21 @@ class CareerEngine:
         This delegates to the simulation engine.  If the simulation module
         is not fully wired up, falls back to *simulate_match*.
         """
+        # Generate match-day weather
+        weather = None
+        if getattr(self, 'weather_system', None) is not None:
+            country = "ENG"
+            if self.clubs:
+                country = getattr(self.clubs[0], "country", "ENG") or "ENG"
+            weather = self.weather_system.generate_weather(
+                self.current_date.month, country
+            )
+            self.news_feed.append({
+                "date": self.current_date.isoformat(),
+                "headline": f"Match Weather: {weather.description}",
+                "category": "match",
+            })
+
         try:
             from .simulation.simulation import LiveGame
             from .simulation.fixture import Fixture
@@ -1236,6 +1287,16 @@ class CareerEngine:
             summary["tv_revenue"] = tv_rev
             summary["final_position"] = position
 
+        # --- FFP compliance check ---
+        if getattr(self, 'ffp_checker', None) is not None and player_club:
+            budget = player_club.finances.balance
+            compliance, msg = self.ffp_checker.check_compliance(
+                {"balance": budget, "total_spending": budget * 0.8, "total_revenue": budget},
+                []
+            )
+            if not compliance:
+                self._add_news(f"FFP Warning: {msg}", msg)
+
         # --- end-of-season news ---
         self._add_news(
             "Season complete!",
@@ -1361,6 +1422,11 @@ class CareerEngine:
             },
             "news_feed": self.news_feed,
             "played_rounds": list(self._played_rounds),
+            "weather_system": {},
+            "player_morale": self.player_morale.serialize() if getattr(self, 'player_morale', None) else {},
+            "player_relationships": self.player_relationships.serialize() if getattr(self, 'player_relationships', None) else {},
+            "career_events": self.career_events.serialize() if getattr(self, 'career_events', None) else {},
+            "stadium_manager": self.stadium_manager.serialize() if getattr(self, 'stadium_manager', None) else {},
         }
 
     @classmethod
@@ -1440,6 +1506,16 @@ class CareerEngine:
         # --- news ---
         engine.news_feed = data.get("news_feed", [])
         engine._played_rounds = set(data.get("played_rounds", []))
+
+        # --- advanced simulation systems ---
+        if data.get("player_morale"):
+            engine.player_morale = PlayerMorale.get_from_dict(data["player_morale"])
+        if data.get("player_relationships"):
+            engine.player_relationships = PlayerRelationships.get_from_dict(data["player_relationships"])
+        if data.get("career_events"):
+            engine.career_events = PlayerCareerEvents.get_from_dict(data["career_events"])
+        if data.get("stadium_manager"):
+            engine.stadium_manager = StadiumManager.get_from_dict(data["stadium_manager"])
 
         return engine
 

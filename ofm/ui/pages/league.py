@@ -11,7 +11,7 @@ class LeaguePage(ttk.Frame):
         self.table_frame = ttk.Frame(self)
         self.table_frame.pack(fill=BOTH, expand=YES, padx=20)
 
-        self.tree = ttk.Treeview(self.table_frame, columns=("Pos", "Club", "P", "W", "D", "L", "GF", "GA", "GD", "Pts"), show='headings')
+        self.tree = ttk.Treeview(self.table_frame, columns=("Pos", "Club", "P", "W", "D", "L", "GF", "GA", "GD", "Pts", "Form"), show='headings')
         self.tree.heading("Pos", text="#")
         self.tree.heading("Club", text="Club")
         self.tree.heading("P", text="P")
@@ -22,10 +22,12 @@ class LeaguePage(ttk.Frame):
         self.tree.heading("GA", text="GA")
         self.tree.heading("GD", text="GD")
         self.tree.heading("Pts", text="Pts")
-        
+        self.tree.heading("Form", text="Form")
+
         self.tree.column("Pos", width=30)
         self.tree.column("Club", width=200)
         self.tree.column("P", width=30)
+        self.tree.column("Form", width=80)
         
         self.tree.pack(fill=BOTH, expand=YES)
 
