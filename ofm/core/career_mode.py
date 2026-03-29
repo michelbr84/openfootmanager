@@ -812,9 +812,11 @@ class CareerEngine:
         # --- advanced simulation init ---
         self.stadium_manager.current_capacity = player_club.stadium_capacity
         # Generate initial relationships for squad
+        # generate_initial_relationships expects objects with .player_id,
+        # .nationality, .dob — use the inner Player (details) objects.
         if player_club.squad:
             self.player_relationships.generate_initial_relationships(
-                list(player_club.squad)
+                [pt.details for pt in player_club.squad]
             )
 
         # --- welcome news ---
