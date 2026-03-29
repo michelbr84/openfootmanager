@@ -36,6 +36,7 @@ from .edit_controller import EditController
 from .new_game_controller import NewGameController
 from .load_game_controller import LoadGameController
 from .career_dashboard_controller import CareerDashboardController
+from .youth_academy_controller import YouthAcademyController
 
 
 class OFMController(ControllerInterface):
@@ -87,6 +88,9 @@ class OFMController(ControllerInterface):
             "load_game": LoadGameController(self, self.gui.pages["load_game"]),
             "career_dashboard": CareerDashboardController(
                 self, self.gui.pages["career_dashboard"]
+            ),
+            "youth_academy": YouthAcademyController(
+                self, self.gui.pages["youth_academy"]
             ),
         }
 

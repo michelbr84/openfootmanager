@@ -32,3 +32,4 @@ from .edit import EditPage
 from .new_game import NewGamePage
 from .load_game import LoadGamePage
 from .career_dashboard import CareerDashboardPage
+from .youth_academy import YouthAcademyPage

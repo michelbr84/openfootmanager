@@ -47,7 +47,7 @@ These systems are fully implemented and tested but only accessible through the c
 
 - [x] **Transfer Market engine** (Backend): offers, negotiation, counter-offers, squad movement, market value — *UI shows browse only, no buy/sell flow yet*
 - [x] **Loan system** (Backend): loan deals, squad movement, expiration — *no dedicated UI*
-- [x] **Youth Academy** (Backend): prospect generation, development, promotion — *no dedicated UI page*
+- [x] **Youth Academy** (E2E): prospect generation, development, promotion, scout reports — *full UI page accessible from Career Dashboard and Debug Home*
 - [x] **Injury Manager** (Backend): severity levels, recovery tracking — *injuries happen in career loop but no injury list UI*
 - [x] **Press Conferences** (Backend): questions, responses, morale effects — *no dedicated UI trigger*
 - [x] **Player/Team Talks** (Backend): praise, criticize, encourage — *no dedicated UI trigger*
@@ -112,7 +112,6 @@ These systems are fully implemented with tests but have **no UI access point**:
 
 These items have no implementation at all:
 
-- [ ] Dedicated Youth Academy UI page
 - [ ] Dedicated Press Conference UI page
 - [ ] Transfer negotiation UI (bid/counter-offer flow)
 - [ ] Loan management UI

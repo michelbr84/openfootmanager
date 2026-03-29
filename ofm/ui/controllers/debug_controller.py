@@ -71,6 +71,9 @@ class DebugPageController(ControllerInterface):
     def go_to_edit_page(self):
         self.switch("edit")
 
+    def go_to_youth_academy_page(self):
+        self.switch("youth_academy")
+
     def _bind(self):
         self.page.match_sim_btn.config(command=self.go_to_match_sim_page)
         self.page.cancel_btn.config(command=self.go_to_home_page)
@@ -88,3 +91,4 @@ class DebugPageController(ControllerInterface):
         self.page.player_profile_btn.config(command=self.go_to_player_profile_page)
         self.page.team_explorer_btn.config(command=self.go_to_team_explorer_page)
         self.page.edit_btn.config(command=self.go_to_edit_page)
+        self.page.youth_academy_btn.config(command=self.go_to_youth_academy_page)

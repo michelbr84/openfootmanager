@@ -63,5 +63,8 @@ class DebugHomePage(ttk.Frame):
         self.visualizer_btn = ttk.Button(self, text="3D Visualizer", command=lambda: self.master.switch("visualizer"))
         self.visualizer_btn.grid(row=13, column=0, padx=10, pady=10, sticky=EW)
 
+        self.youth_academy_btn = ttk.Button(self, text="Youth Academy")
+        self.youth_academy_btn.grid(row=14, column=0, padx=10, pady=10, sticky=EW)
+
         self.cancel_btn = ttk.Button(self, text="Cancel")
-        self.cancel_btn.grid(row=14, column=0, padx=10, pady=10, sticky=EW)
+        self.cancel_btn.grid(row=15, column=0, padx=10, pady=10, sticky=EW)

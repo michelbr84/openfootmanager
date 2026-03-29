@@ -105,6 +105,7 @@ class GUI:
             "new_game": self._add_frame(NewGamePage),
             "load_game": self._add_frame(LoadGamePage),
             "career_dashboard": self._add_frame(CareerDashboardPage),
+            "youth_academy": self._add_frame(YouthAcademyPage),
         }
 
         # Reverse lookup: frame -> page name
